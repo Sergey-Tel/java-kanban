@@ -1,10 +1,16 @@
 package model;
+import java.util.ArrayList;
 import java.util.Objects;
 public class SubTask extends Task {
     protected Integer epicID;
+    protected ArrayList<SubTask> subTasks = new ArrayList<>();
     public SubTask(String name, String description, Integer id, Integer epicID) {
         super(name, description, id);
         this.epicID = epicID;
+    }
+    public ArrayList<SubTask> getSubTasks() {
+
+        return subTasks;
     }
     public Integer getEpicID() {
         return epicID;

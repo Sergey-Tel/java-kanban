@@ -1,6 +1,9 @@
 package model;
+
 import java.util.Objects;
+
 import static model.StatusTracker.NEW;
+
 public class Task {
     protected String name;
     protected String description;
@@ -51,8 +54,14 @@ public class Task {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof Task)) return false;
+        if (this == o) {
+            return true;
+        }
+        ;
+        if (!(o instanceof Task)) {
+            return false;
+        }
+        ;
         Task task = (Task) o;
         return Objects.equals(getName(), task.getName())
                 && Objects.equals(getDescription(), task.getDescription())

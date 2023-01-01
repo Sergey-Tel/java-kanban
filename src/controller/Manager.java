@@ -7,14 +7,17 @@ import java.util.ArrayList;
 
 public class Manager {
 
-    TasksManager tasksManager = new TasksManager();
-    EpManagerTask epManagerTask = new EpManagerTask();
-    SubTasksManager subTasksManager = new SubTasksManager(epManagerTask);
+    protected TasksManager tasksManager = new TasksManager();
+    protected EpManagerTask epManagerTask = new EpManagerTask();
+    protected SubTasksManager subTasksManager = new SubTasksManager(epManagerTask);
 
 
 
     public ArrayList<Task> findAllTasks() {
-        return tasksManager.findAll();
+        return tasksManager.findAllTasks();
+    }
+    public ArrayList<SubTask> findAllSubTasks(Task task) {
+        return subTasksManager.findAllOfSubTasks(task);
     }
 
     public ArrayList<EpicCards> findAllEpics() {
@@ -27,11 +30,11 @@ public class Manager {
 
 
     public void deleteAllTask() {
-        tasksManager.deleteAll();
+        tasksManager.deleteAllTasks();
     }
 
     public void deleteAllSubTasks() {
-        subTasksManager.deleteAll();
+        subTasksManager.deleteAllSubtasks();
     }
 
     public void deleteAllEpics() {
@@ -40,11 +43,11 @@ public class Manager {
 
 
     public SubTask findSubTaskById(Integer id) {
-        return subTasksManager.findById(id);
+        return subTasksManager.findByIdSubTask(id);
     }
 
     public Task findTaskById(Integer id) {
-        return tasksManager.findById(id);
+        return tasksManager.findByIdTask(id);
     }
 
     public EpicCards findEpicById(Integer id) {
@@ -52,11 +55,11 @@ public class Manager {
     }
 
     public Task createTask(Task task) {
-        return tasksManager.create(task);
+        return tasksManager.createTask(task);
     }
 
     public SubTask createSubTask(SubTask subTask, EpicCards epicCards) {
-        return subTasksManager.create(subTask, epicCards);
+        return subTasksManager.createOneSubTask(subTask, epicCards);
     }
 
     public EpicCards createEpic(EpicCards epicCards) {
@@ -76,7 +79,7 @@ public class Manager {
     }
 
     public void deleteSubTaskById(Integer id) {
-        subTasksManager.deleteByID(id);
+        subTasksManager.deleteByIDSubTask(id);
     }
 
     public void deleteEpicById(Integer id) {
@@ -84,6 +87,6 @@ public class Manager {
     }
 
     public Task deleteTaskById(Integer id) {
-        return tasksManager.deleteById(id);
+        return tasksManager.deleteByIdTask(id);
     }
 }

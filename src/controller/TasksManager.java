@@ -8,22 +8,22 @@ public class TasksManager {
     protected Integer counterIDTasks = 0;
 
 
-    public ArrayList<Task> findAll() {
+    public ArrayList<Task> findAllTasks() {
         return new ArrayList<>(tasks.values());
     }
 
 
-    public void deleteAll() {
+    public void deleteAllTasks() {
         tasks.clear();
     }
 
 
-    public Task findById(Integer id) {
+    public Task findByIdTask(Integer id) {
         return tasks.get(id);
     }
 
 
-    public Task create(Task task) {
+    public Task createTask(Task task) {
         final Task newTask = new Task(task.getName(), task.getDescription(), ++counterIDTasks);
         if (!tasks.containsKey(newTask.getId()))
             tasks.put(newTask.getId(), newTask);
@@ -47,7 +47,7 @@ public class TasksManager {
     }
 
 
-    public Task deleteById(Integer id) {
+    public Task deleteByIdTask(Integer id) {
         final Task deletedTask = tasks.get(id);
         tasks.remove(id);
         return deletedTask;
