@@ -57,11 +57,11 @@ public class Task {
         if (this == o) {
             return true;
         }
-        ;
+
         if (!(o instanceof Task)) {
             return false;
         }
-        ;
+
         Task task = (Task) o;
         return Objects.equals(getName(), task.getName())
                 && Objects.equals(getDescription(), task.getDescription())

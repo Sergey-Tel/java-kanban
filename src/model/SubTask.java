@@ -3,24 +3,27 @@ import java.util.ArrayList;
 import java.util.Objects;
 public class SubTask extends Task {
     protected Integer epicID;
-    protected ArrayList<SubTask> subTasks = new ArrayList<>();
+
     public SubTask(String name, String description, Integer id, Integer epicID) {
         super(name, description, id);
         this.epicID = epicID;
     }
-    public ArrayList<SubTask> getSubTasks() {
 
-        return subTasks;
-    }
     public Integer getEpicID() {
         return epicID;
     }
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof SubTask)) return false;
-        if (!super.equals(o)) return false;
+        if (this == o) {
+            return true;
+        }
+        if (!(o instanceof SubTask)) {
+            return false;
+        }
+        if (!super.equals(o)) {
+            return false;
+        }
         SubTask subTask = (SubTask) o;
         return Objects.equals(getEpicID(), subTask.getEpicID());
     }

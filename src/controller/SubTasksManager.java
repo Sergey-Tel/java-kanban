@@ -20,9 +20,7 @@ public class SubTasksManager {
     public ArrayList<SubTask> findAllOfEpic(EpicCards epicCards) {
         return epManagerTask.epics.get(epicCards.getId()).getSubTasksEp();
     }
-    public ArrayList<SubTask> findAllOfSubTasks(Task task) {
-        return subTasks.get(task.getId()).getSubTasks();
-    }
+
 
 
     public void deleteAllSubtasks() {

@@ -7,17 +7,14 @@ import java.util.ArrayList;
 
 public class Manager {
 
-    protected TasksManager tasksManager = new TasksManager();
-    protected EpManagerTask epManagerTask = new EpManagerTask();
-    protected SubTasksManager subTasksManager = new SubTasksManager(epManagerTask);
+    private final TasksManager tasksManager = new TasksManager();
+    private final EpManagerTask epManagerTask = new EpManagerTask();
+    private final SubTasksManager subTasksManager = new SubTasksManager(epManagerTask);
 
 
 
     public ArrayList<Task> findAllTasks() {
         return tasksManager.findAllTasks();
-    }
-    public ArrayList<SubTask> findAllSubTasks(Task task) {
-        return subTasksManager.findAllOfSubTasks(task);
     }
 
     public ArrayList<EpicCards> findAllEpics() {
