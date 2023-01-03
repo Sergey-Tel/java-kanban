@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 public class EpManagerTask {
-    protected HashMap<Integer, EpicCards> epics = new HashMap<>();
+    private HashMap<Integer, EpicCards> epics = new HashMap<>();
     protected Integer counterIDEpics = 0;
 
 
@@ -22,6 +22,9 @@ public class EpManagerTask {
         return epics.get(id);
     }
 
+    public HashMap<Integer, EpicCards> getEpics() {
+        return epics;
+    }
 
     public EpicCards createOneEpic(EpicCards task) {
         final EpicCards newTask = new EpicCards(task.getName(), task.getDescription(), ++counterIDEpics);

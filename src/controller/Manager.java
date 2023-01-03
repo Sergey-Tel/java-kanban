@@ -1,4 +1,5 @@
 package controller;
+
 import model.EpicCards;
 import model.SubTask;
 import model.Task;
@@ -12,13 +13,16 @@ public class Manager {
     private final SubTasksManager subTasksManager = new SubTasksManager(epManagerTask);
 
 
-
     public ArrayList<Task> findAllTasks() {
         return tasksManager.findAllTasks();
     }
 
     public ArrayList<EpicCards> findAllEpics() {
         return epManagerTask.findAllEpics();
+    }
+
+    public ArrayList<SubTask> findAllSubTask() {
+        return subTasksManager.findAllSubTask();
     }
 
     public ArrayList<SubTask> findAllSubTasksOfEpic(EpicCards epicCards) {

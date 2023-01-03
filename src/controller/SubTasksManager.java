@@ -1,10 +1,12 @@
 package controller;
+
 import model.EpicCards;
 import model.SubTask;
 import model.Task;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+
 import static model.StatusTracker.*;
 
 public class SubTasksManager {
@@ -18,15 +20,17 @@ public class SubTasksManager {
 
 
     public ArrayList<SubTask> findAllOfEpic(EpicCards epicCards) {
-        return epManagerTask.epics.get(epicCards.getId()).getSubTasksEp();
+        return epManagerTask.getEpics().get(epicCards.getId()).getSubTasksEp();
     }
-
 
 
     public void deleteAllSubtasks() {
         subTasks.clear();
     }
 
+    public ArrayList<SubTask> findAllSubTask() {
+        return new ArrayList<>(subTasks.values());
+    }
 
 
     public SubTask findByIdSubTask(Integer id) {
@@ -42,8 +46,8 @@ public class SubTasksManager {
         originalTask.setDescription(task.getDescription());
         originalTask.setName(task.getName());
         originalTask.setStatus(task.getStatus());
-        epManagerTask.epics.get(task.getEpicID()).getSubTasksEp().remove(originalTask);
-        epManagerTask.epics.get(task.getEpicID()).getSubTasksEp().add(task);
+        epManagerTask.getEpics().get(task.getEpicID()).getSubTasksEp().remove(originalTask);
+        epManagerTask.getEpics().get(task.getEpicID()).getSubTasksEp().add(task);
         refreshStatusSubTask(task);
         return originalTask;
     }
@@ -53,7 +57,7 @@ public class SubTasksManager {
         final SubTask newSubTask = new SubTask(subTask.getName(), subTask.getDescription(), ++counterIDSubTasks, epicCards.getId());
         if (!subTasks.containsKey(newSubTask.getId())) {
             subTasks.put(newSubTask.getId(), newSubTask);
-            epManagerTask.epics.get(epicCards.getId()).getSubTasksEp().add(/*newSubTask.getId(),*/ newSubTask);
+            epManagerTask.getEpics().get(epicCards.getId()).getSubTasksEp().add(/*newSubTask.getId(),*/ newSubTask);
         } else {
             System.out.println("Задача с таким ID уже существует");
             return null;
@@ -63,7 +67,7 @@ public class SubTasksManager {
 
 
     public void refreshStatusSubTask(SubTask task) {
-        ArrayList<SubTask> subTasksOfEpic = epManagerTask.epics.get(task.getEpicID()).getSubTasksEp();
+        ArrayList<SubTask> subTasksOfEpic = epManagerTask.getEpics().get(task.getEpicID()).getSubTasksEp();
         int counterNew = 0;
         int counterDone = 0;
         for (SubTask subTask : subTasksOfEpic) {
@@ -74,18 +78,18 @@ public class SubTasksManager {
             }
         }
         if (counterNew == subTasksOfEpic.size()) {
-            epManagerTask.epics.get(task.getEpicID()).setStatus(NEW);
+            epManagerTask.getEpics().get(task.getEpicID()).setStatus(NEW);
         } else if (counterDone == subTasksOfEpic.size()) {
-            epManagerTask.epics.get(task.getEpicID()).setStatus(DONE);
+            epManagerTask.getEpics().get(task.getEpicID()).setStatus(DONE);
         } else {
-            epManagerTask.epics.get(task.getEpicID()).setStatus(IN_PROGRESS);
+            epManagerTask.getEpics().get(task.getEpicID()).setStatus(IN_PROGRESS);
         }
     }
 
 
     public SubTask deleteByIDSubTask(Integer id) {
         final SubTask deletedTask = subTasks.get(id);
-        epManagerTask.epics.get(deletedTask.getEpicID()).getSubTasksEp().remove(deletedTask);
+        epManagerTask.getEpics().get(deletedTask.getEpicID()).getSubTasksEp().remove(deletedTask);
         subTasks.remove(id);
         return deletedTask;
     }

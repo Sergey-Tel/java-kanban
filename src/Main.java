@@ -37,6 +37,18 @@ public class Main {
             System.out.println("Метод findAllTask() работает правильно");
         }
 
+        System.out.println("Метод findAllSubTask().");
+        ArrayList<SubTask> subTaskArrayList = manager.findAllSubTask();
+        System.out.println("Метод findAllSubTask(). Печатаем весь список подзадач:");
+        for (SubTask value : subTaskArrayList) {
+            System.out.println(value);
+        }
+        if (taskArrayList.isEmpty()) {
+            System.out.println("Метод findAllSubTask() не возвращает список задач");
+        } else {
+            System.out.println("Метод findAllSubTask() работает правильно");
+        }
+
         System.out.println("Метод findTaskById().");
         Task foundTask = manager.findTaskById(2);
         System.out.println("Печатаем найденную задачу");
