@@ -85,7 +85,7 @@ public class InMemoryTaskManager implements TaskManager {
         }
     }
 
-    // ТЗ №3: Создание. Сам объект должен передаваться в качестве параметра.
+
     @Override
     public int create(Task task) {
         if (tasks.containsKey(task.getTaskId())) {
@@ -97,7 +97,7 @@ public class InMemoryTaskManager implements TaskManager {
         }
     }
 
-    // ТЗ №3: Создание. Сам объект должен передаваться в качестве параметра.
+
     @Override
     public int create(Epic epic) {
         if (epics.containsKey(epic.getTaskId())) {
@@ -109,7 +109,7 @@ public class InMemoryTaskManager implements TaskManager {
         }
     }
 
-    // ТЗ №3: Создание. Сам объект должен передаваться в качестве параметра.
+
     @Override
     public int create(SubTask subtask) {
         if (subtasks.containsKey(subtask.getTaskId())) {
@@ -134,7 +134,7 @@ public class InMemoryTaskManager implements TaskManager {
         }
     }
 
-    // ТЗ №3: Обновление. Новая версия объекта с верным идентификатором передаются в виде параметра.
+
     @Override
     public void update(Task task) {
         if (tasks.containsKey(task.getTaskId())) {
@@ -145,7 +145,7 @@ public class InMemoryTaskManager implements TaskManager {
         }
     }
 
-    // ТЗ №3: Обновление. Новая версия объекта с верным идентификатором передаются в виде параметра.
+
     @Override
     public void update(Epic epic) {
         if (epics.containsKey(epic.getTaskId())) {
@@ -156,7 +156,7 @@ public class InMemoryTaskManager implements TaskManager {
         }
     }
 
-    // ТЗ №3: Обновление. Новая версия объекта с верным идентификатором передаются в виде параметра.
+
     @Override
     public void update(SubTask subtask) {
         if (subtasks.containsKey(subtask.getTaskId())) {
@@ -169,7 +169,7 @@ public class InMemoryTaskManager implements TaskManager {
         }
     }
 
-    // ТЗ №3: Обновление. Новая версия объекта с верным идентификатором передаются в виде параметра.
+
     @Override
     public void update(TaskBase task) {
         if (task instanceof Task) {
