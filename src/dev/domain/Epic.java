@@ -25,8 +25,7 @@ public class Epic extends dev.domain.Task {
             Managers.getDefault().create(subtask);
             updateStatus();
         } else {
-            throw new IndexOutOfBoundsException("Подзадача с идентификационным номером " +
-                    subtask.getTaskId() + " уже присутствует в коллекции.");
+            throw new IndexOutOfBoundsException(String.format("Подзадача с идентификационным номером %d уже присутствует в коллекции.", subtask.getTaskId()));
         }
     }
 
@@ -36,8 +35,7 @@ public class Epic extends dev.domain.Task {
             Managers.getDefault().update(subtask);
             updateStatus();
         } else {
-            throw new IndexOutOfBoundsException("Подзадача с идентификационным номером " +
-                    subtask.getTaskId() + " отсутствует в коллекции.");
+            throw new IndexOutOfBoundsException(String.format("Подзадача с идентификационным номером %d отсутствует в коллекции.", subtask.getTaskId()));
         }
     }
 
@@ -56,8 +54,7 @@ public class Epic extends dev.domain.Task {
         if (subtasks.contains(taskId)) {
             return Managers.getDefault().getSubtask(taskId);
         } else {
-            throw new IndexOutOfBoundsException("Идентификационный номер задачи " +
-                    taskId + " отсутствует в коллекции.");
+            throw new IndexOutOfBoundsException(String.format("Идентификационный номер задачи %d отсутствует в коллекции.",taskId));
         }
     }
 
@@ -66,7 +63,7 @@ public class Epic extends dev.domain.Task {
         subtasks.addAll(Managers.getDefault().getSubtasks().stream()
                 .filter(subtask -> subtask.getEpicId().equals(this.getTaskId()))
                 .map(AbstractTask::getTaskId)
-                .collect(Collectors.toList()));
+                .toList());
         if (subtasks.size() == 0) {
             status = TaskStatusEnum.NEW;
         } else {
@@ -103,8 +100,7 @@ public class Epic extends dev.domain.Task {
             }
             updateStatus();
         } else {
-            throw new IndexOutOfBoundsException("Идентификационный номер задачи " +
-                    taskId + " отсутствует в коллекции.");
+            throw new IndexOutOfBoundsException(String.format("Идентификационный номер задачи %d отсутствует в коллекции.", taskId));
         }
     }
 

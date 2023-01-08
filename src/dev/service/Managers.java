@@ -2,10 +2,10 @@ package dev.service;
 
 
 public class Managers {
-    static dev.service.TaskManager taskManager;
-    static HistoryManager historyManager;
+    private static TaskManager taskManager;
+    private static HistoryManager historyManager;
 
-    public static dev.service.TaskManager getDefault() {
+    public static TaskManager getDefault() {
         if (taskManager == null) {
             taskManager = new InMemoryTaskManager();
         }
