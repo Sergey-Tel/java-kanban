@@ -57,6 +57,9 @@ public class MainMenu {
                 case "9":
                     TestUtil.testSprint4(manager);
                     break;
+                case "10":
+                    TestUtil.testSprint5(manager);
+                    break;
                 case EXIT_KEYS:
                     System.out.println("Завершение работы приложения");
                     scanner.close();
@@ -115,7 +118,7 @@ public class MainMenu {
     }
 
     static void getHistory(TaskManager manager) {
-        System.out.println("Вывод истории просмотра (10 позиций)");
+        System.out.println("Вывод истории просмотра");
         List<TaskBase> tasks = manager.getHistory();
         ReportUtils.printTasksCollection(tasks);
     }

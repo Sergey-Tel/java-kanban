@@ -89,7 +89,8 @@ public class InMemoryTaskManager implements TaskManager {
     @Override
     public int create(Task task) {
         if (tasks.containsKey(task.getTaskId())) {
-            throw new IndexOutOfBoundsException(String.format("Задача с идентификационным номером %d уже была создана ранее.",task.getTaskId()));
+            throw new IndexOutOfBoundsException("Задача с идентификационным номером "
+                    + task.getTaskId() + " уже была создана ранее.");
         } else {
             tasks.put(task.getTaskId(), task);
             return task.getTaskId();
@@ -100,7 +101,8 @@ public class InMemoryTaskManager implements TaskManager {
     @Override
     public int create(Epic epic) {
         if (epics.containsKey(epic.getTaskId())) {
-            throw new IndexOutOfBoundsException(String.format("Эпик-задача с идентификационным номером %d уже была создана ранее.",epic.getTaskId()));
+            throw new IndexOutOfBoundsException("Эпик-задача с идентификационным номером "
+                    + epic.getTaskId() + " уже была создана ранее.");
         } else {
             epics.put(epic.getTaskId(), epic);
             return epic.getTaskId();
@@ -111,7 +113,8 @@ public class InMemoryTaskManager implements TaskManager {
     @Override
     public int create(SubTask subtask) {
         if (subtasks.containsKey(subtask.getTaskId())) {
-            throw new IndexOutOfBoundsException(String.format("Подзадача с идентификационным номером %d уже была создана ранее.",subtask.getTaskId()));
+            throw new IndexOutOfBoundsException("Подзадача с идентификационным номером " +
+                    subtask.getTaskId() + " уже была создана ранее.");
         } else {
             subtasks.put(subtask.getTaskId(), subtask);
             Epic epic = epics.get(subtask.getEpicId());
@@ -234,9 +237,9 @@ public class InMemoryTaskManager implements TaskManager {
     @Override
     public SubTask getSubtask(int taskId) {
         if (subtasks.containsKey(taskId)) {
-            SubTask subtask = subtasks.get(taskId);
-            Managers.getDefaultHistory().add(subtask);
-            return subtask;
+            SubTask subTask = subtasks.get(taskId);
+            Managers.getDefaultHistory().add(subTask);
+            return subTask;
         } else {
             throw new IndexOutOfBoundsException("Подзадача с заданным идентификационным номером "
                     + "отсутствует в коллекции.");
@@ -280,15 +283,19 @@ public class InMemoryTaskManager implements TaskManager {
     public void removeTask(int taskId) {
         if (tasks.containsKey(taskId)) {
             tasks.remove(taskId);
+            Managers.getDefaultHistory().remove(taskId);
         } else if (epics.containsKey(taskId)) {
             for (Integer subtaskId : epics.get(taskId).subtaskIdList()) {
                 subtasks.remove(subtaskId);
+                Managers.getDefaultHistory().remove(subtaskId);
             }
             epics.remove(taskId);
+            Managers.getDefaultHistory().remove(taskId);
         } else if (subtasks.containsKey(taskId)) {
             SubTask subtask = subtasks.get(taskId);
             Epic epic = epics.get(subtask.getEpicId());
             subtasks.remove(taskId);
+            Managers.getDefaultHistory().remove(taskId);
             epic.updateStatus();
         } else {
             throw new IndexOutOfBoundsException("Идентификационный номер (эпик/под)задачи отсутствует в коллекции.");
@@ -300,7 +307,7 @@ public class InMemoryTaskManager implements TaskManager {
         tasks.clear();
         epics.clear();
         subtasks.clear();
-        getHistory().clear();
+        Managers.getDefaultHistory().clear();
     }
 
     @Override

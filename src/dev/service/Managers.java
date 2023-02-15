@@ -2,8 +2,8 @@ package dev.service;
 
 
 public class Managers {
-    private static TaskManager taskManager;
-    private static HistoryManager historyManager;
+    static TaskManager taskManager;
+    static HistoryManager historyManager;
 
     public static TaskManager getDefault() {
         if (taskManager == null) {

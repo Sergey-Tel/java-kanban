@@ -19,6 +19,7 @@ public enum TaskStatusEnum {
         }
     }
 
+
     public static TaskStatusEnum compareEnum(TaskStatusEnum first, TaskStatusEnum second) {
         if (first == null && second == null) {
             return null;

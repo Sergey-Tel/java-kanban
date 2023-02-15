@@ -1,7 +1,7 @@
 package dev.domain;
 
 
-public class SubTask extends dev.domain.Task {
+public class SubTask extends Task {
     private final Integer parentEpicId;
 
     public SubTask(Integer parentEpicId, int taskId, String name, String description, TaskStatusEnum status) {

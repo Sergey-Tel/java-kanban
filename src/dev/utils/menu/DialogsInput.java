@@ -191,8 +191,8 @@ public class DialogsInput {
                 Integer taskId = inputTaskId();
                 if (taskId != null) {
                     if (manager.containsSubtaskId(taskId)) {
-                        SubTask subtask = manager.getSubtask(taskId);
-                        inputUpdateSubtask(manager, subtask);
+                        SubTask subTask = manager.getSubtask(taskId);
+                        inputUpdateSubtask(manager, subTask);
                     } else {
                         printIndexOutWarningMessage(taskId);
                     }

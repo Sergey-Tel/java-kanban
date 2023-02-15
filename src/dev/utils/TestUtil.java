@@ -1,4 +1,5 @@
 package dev.utils;
+
 import dev.domain.*;
 import dev.service.TaskManager;
 
@@ -15,92 +16,94 @@ public final class TestUtil {
         System.out.println("\n1.\tСоздайте 2 задачи, один эпик с 2 подзадачами, а другой эпик с 1 подзадачей\n"
                 + "Распечатайте списки эпиков, задач и подзадач, через System.out.println(..).");
 
-        int nextTaskId = dev.utils.CollectionUtils.getNextTaskId(manager.getAllTaskId());
-        dev.domain.Task shoppingTask = new dev.domain.Task(nextTaskId, "Купить батарейки!", "Необходимо 4 шт.");
+        int nextTaskId = CollectionUtils.getNextTaskId(manager.getAllTaskId());
+        Task shoppingTask = new Task(nextTaskId, "Купить батарейки!", "Необходимо 4 шт.");
         manager.create(shoppingTask);
 
-        nextTaskId = dev.utils.CollectionUtils.getNextTaskId(manager.getAllTaskId());
-        dev.domain.Task lessonTask = new dev.domain.Task(nextTaskId, "Проверить уроки!");
+        nextTaskId = CollectionUtils.getNextTaskId(manager.getAllTaskId());
+        Task lessonTask = new Task(nextTaskId, "Проверить уроки!");
         lessonTask.setDescription("В дневнике задание.");
         manager.create(lessonTask);
 
-        nextTaskId = dev.utils.CollectionUtils.getNextTaskId(manager.getAllTaskId());
-        dev.domain.Epic removalEpic = new dev.domain.Epic(nextTaskId,
+        nextTaskId = CollectionUtils.getNextTaskId(manager.getAllTaskId());
+        Epic removalEpic = new Epic(nextTaskId,
                 "Переезд", "Снять наличные деньги");
         manager.create(removalEpic);
 
-        nextTaskId = dev.utils.CollectionUtils.getNextTaskId(manager.getAllTaskId());
-        dev.domain.SubTask callSubTask = new dev.domain.SubTask(removalEpic.getTaskId(), nextTaskId,
+        nextTaskId = CollectionUtils.getNextTaskId(manager.getAllTaskId());
+        SubTask callSubtask = new SubTask(removalEpic.getTaskId(), nextTaskId,
                 "Заказать машину", "Газели будет достаточно.");
-        removalEpic.create(callSubTask);
+        removalEpic.create(callSubtask);
 
-        nextTaskId = dev.utils.CollectionUtils.getNextTaskId(manager.getAllTaskId());
-        dev.domain.SubTask packSubTask = new dev.domain.SubTask(removalEpic.getTaskId(), nextTaskId, "Упаковать коробки");
-        packSubTask.setDescription("5-6 коробок должно хватить.");
-        removalEpic.create(packSubTask);
+        nextTaskId = CollectionUtils.getNextTaskId(manager.getAllTaskId());
+        SubTask packSubtask = new SubTask(removalEpic.getTaskId(), nextTaskId, "Упаковать коробки");
+        packSubtask.setDescription("5-6 коробок должно хватить.");
+        removalEpic.create(packSubtask);
 
-        nextTaskId = dev.utils.CollectionUtils.getNextTaskId(manager.getAllTaskId());
-        dev.domain.SubTask tapeSubTask = new dev.domain.SubTask(removalEpic.getTaskId(), nextTaskId, "Купить скотч");
-        tapeSubTask.setDescription("20 метров.");
-        removalEpic.create(tapeSubTask);
+        nextTaskId = CollectionUtils.getNextTaskId(manager.getAllTaskId());
+        SubTask tapeSubtask = new SubTask(removalEpic.getTaskId(), nextTaskId, "Купить скотч");
+        tapeSubtask.setDescription("20 метров.");
+        removalEpic.create(tapeSubtask);
 
-        nextTaskId = dev.utils.CollectionUtils.getNextTaskId(manager.getAllTaskId());
-        dev.domain.Epic epicParty = new dev.domain.Epic(nextTaskId, "Вечеринка");
+        nextTaskId = CollectionUtils.getNextTaskId(manager.getAllTaskId());
+        Epic epicParty = new Epic(nextTaskId, "Вечеринка");
         epicParty.setDescription("Поздравление с праздником в коллективе");
         manager.create(epicParty);
 
-        nextTaskId = dev.utils.CollectionUtils.getNextTaskId(manager.getAllTaskId());
-        dev.domain.SubTask barSubTask = new dev.domain.SubTask(epicParty.getTaskId(), nextTaskId, "Купить цветы и шампанское");
-        barSubTask.setDescription("К 2-3 бутылкам шампанского нужно взять 2 коробки шоколадных конфет и фрукты.");
-        epicParty.create(barSubTask);
+        nextTaskId = CollectionUtils.getNextTaskId(manager.getAllTaskId());
+        SubTask barSubtask = new SubTask(epicParty.getTaskId(), nextTaskId, "Купить цветы и шампанское");
+        barSubtask.setDescription("К 2-3 бутылкам шампанского нужно взять 2 коробки шоколадных конфет и фрукты.");
+        epicParty.create(barSubtask);
 
         System.out.println("Результат:");
-        dev.utils.ReportUtils.printTasksCollection(manager.getHighLevelTasks());
+        ReportUtils.printTasksCollection(manager.getHighLevelTasks());
 
         System.out.println("\n2.\tИзмените статусы созданных объектов, распечатайте. Проверьте, что статус задачи\n"
                 + "и подзадачи сохранился, а статус эпика рассчитался по статусам подзадач.");
 
-        dev.domain.Task updateShoppingTask = (dev.domain.Task) manager.getTask(0).clone();
-        updateShoppingTask.setStatus(dev.domain.TaskStatusEnum.DONE);
+        Task updateShoppingTask = (Task) manager.getTask(0).clone();
+        updateShoppingTask.setStatus(TaskStatusEnum.DONE);
         manager.update(updateShoppingTask);
 
-        dev.domain.SubTask updateCallSubTask = (dev.domain.SubTask) manager.getSubtask(3).clone();
-        updateCallSubTask.setStatus(dev.domain.TaskStatusEnum.IN_PROGRESS);
-        removalEpic.update(updateCallSubTask);
+        SubTask updateCallSubtask = (SubTask) manager.getSubtask(3).clone();
+        updateCallSubtask.setStatus(TaskStatusEnum.IN_PROGRESS);
+        removalEpic.update(updateCallSubtask);
 
-        dev.domain.SubTask updatePackSubTask = (dev.domain.SubTask) manager.getSubtask(4).clone();
-        updatePackSubTask.setDescription("В одну коробку войдет.");
-        updatePackSubTask.setStatus(dev.domain.TaskStatusEnum.DONE);
-        removalEpic.update(updatePackSubTask);
+        SubTask updatePackSubtask = (SubTask) manager.getSubtask(4).clone();
+        updatePackSubtask.setDescription("В одну коробку войдет.");
+        updatePackSubtask.setStatus(TaskStatusEnum.DONE);
+        removalEpic.update(updatePackSubtask);
 
-        dev.domain.SubTask updateBarSubTask = (dev.domain.SubTask) manager.getSubtask(5).clone();
-        updateBarSubTask.setStatus(dev.domain.TaskStatusEnum.DONE);
-        removalEpic.update(updateBarSubTask);
+        SubTask updateBarSubtask = (SubTask) manager.getSubtask(5).clone();
+        updateBarSubtask.setStatus(TaskStatusEnum.DONE);
+        removalEpic.update(updateBarSubtask);
 
         System.out.println("Результат:");
-        dev.utils.ReportUtils.printTasksCollection(manager.getHighLevelTasks());
+        ReportUtils.printTasksCollection(manager.getHighLevelTasks());
 
         System.out.println("\n3.\tПопробуйте удалить одну из задач и один из эпиков.");
         manager.removeTask(0);
         manager.removeTask(epicParty.getTaskId());
 
         System.out.println("Результат:");
-        dev.utils.ReportUtils.printTasksCollection(manager.getHighLevelTasks());
+        ReportUtils.printTasksCollection(manager.getHighLevelTasks());
 
         System.out.println("\n4.\t Печать по отдельным категориям. Только задачи:");
-        dev.utils.ReportUtils.printTasksCollection(manager.getTasks().stream()
-                .map(t -> (dev.domain.TaskBase) t)
+        ReportUtils.printTasksCollection(manager.getTasks().stream()
+                .map(t -> (TaskBase) t)
                 .collect(Collectors.toList()));
 
         System.out.println("\n5.\t Печать по отдельным категориям. Только эпики:");
-        dev.utils.ReportUtils.printTasksCollection(manager.getEpics().stream()
-                .map(t -> (dev.domain.TaskBase) t)
+        ReportUtils.printTasksCollection(manager.getEpics().stream()
+                .map(t -> (TaskBase) t)
                 .collect(Collectors.toList()));
 
         System.out.println("\n6.\t Печать по отдельным категориям. Только подзадачи:");
-        dev.utils.ReportUtils.printTasksCollection(manager.getSubtasks().stream()
-                .map(t -> (dev.domain.TaskBase) t)
+        ReportUtils.printTasksCollection(manager.getSubtasks().stream()
+                .map(t -> (TaskBase) t)
                 .collect(Collectors.toList()));
+
+        System.out.println("Тест по ТЗ №3 выполнен.");
     }
 
 
@@ -110,53 +113,53 @@ public final class TestUtil {
 
         System.out.println("\n1.\tСоздайте несколько задач разного типа.");
 
-        int nextTaskId = dev.utils.CollectionUtils.getNextTaskId(manager.getAllTaskId());
-        dev.domain.Task shoppingTask = new dev.domain.Task(nextTaskId, "Задача 1", "Создаю обычную задачу с индексом 0.");
+        int nextTaskId = CollectionUtils.getNextTaskId(manager.getAllTaskId());
+        Task shoppingTask = new Task(nextTaskId, "Задача 1", "Создаю обычную задачу с индексом 0.");
         manager.create(shoppingTask);
 
-        nextTaskId = dev.utils.CollectionUtils.getNextTaskId(manager.getAllTaskId());
-        dev.domain.Epic repairEpic = new dev.domain.Epic(nextTaskId,
+        nextTaskId = CollectionUtils.getNextTaskId(manager.getAllTaskId());
+        Epic repairEpic = new Epic(nextTaskId,
                 "Эпик-задача 1", "Создаю пустую эпик-задачу с индексом 1.");
         manager.create(repairEpic);
 
-        nextTaskId = dev.utils.CollectionUtils.getNextTaskId(manager.getAllTaskId());
-        dev.domain.SubTask subtask = new dev.domain.SubTask(repairEpic.getTaskId(), nextTaskId,
+        nextTaskId = CollectionUtils.getNextTaskId(manager.getAllTaskId());
+        SubTask subtask = new SubTask(repairEpic.getTaskId(), nextTaskId,
                 "Подзадача 1", "Создаю подзадачу с индексом 2. Метод: epic.create(subtask)");
         repairEpic.create(subtask);
 
-        nextTaskId = dev.utils.CollectionUtils.getNextTaskId(manager.getAllTaskId());
-        subtask = new dev.domain.SubTask(repairEpic.getTaskId(), nextTaskId,
+        nextTaskId = CollectionUtils.getNextTaskId(manager.getAllTaskId());
+        subtask = new SubTask(repairEpic.getTaskId(), nextTaskId,
                 "Подзадача 2",
                 "Создаю подзадачу с индексом 3. Метод: epic.create(subtask)",
-                dev.domain.TaskStatusEnum.DONE);
+                TaskStatusEnum.DONE);
         repairEpic.create(subtask);
 
-        nextTaskId = dev.utils.CollectionUtils.getNextTaskId(manager.getAllTaskId());
-        subtask = new dev.domain.SubTask(repairEpic.getTaskId(), nextTaskId, "Подзадача 3",
+        nextTaskId = CollectionUtils.getNextTaskId(manager.getAllTaskId());
+        subtask = new SubTask(repairEpic.getTaskId(), nextTaskId, "Подзадача 3",
                 "Создаю подзадачу с индексом 4. Метод: manager.create(subtask)");
         manager.create(subtask);
 
-        nextTaskId = dev.utils.CollectionUtils.getNextTaskId(manager.getAllTaskId());
-        subtask = new dev.domain.SubTask(repairEpic.getTaskId(), nextTaskId,
+        nextTaskId = CollectionUtils.getNextTaskId(manager.getAllTaskId());
+        subtask = new SubTask(repairEpic.getTaskId(), nextTaskId,
                 "Подзадача 4", "Создаю подзадачу с индексом 5. Метод: manager.create(subtask)");
         manager.create(subtask);
 
         System.out.println("Результат:");
-        dev.utils.ReportUtils.printTasksCollection(manager.getHighLevelTasks());
+        ReportUtils.printTasksCollection(manager.getHighLevelTasks());
 
         System.out.println("\n2.\tВызываем разные методы интерфейса TaskManager\n" +
                 "и напечатаем историю просмотров после каждого вызова");
 
         System.out.println("\nВызываем задание № 0 и меняем его статус.");
-        dev.domain.Task updateShoppingTask = (dev.domain.Task) manager.getTask(0).clone();
-        updateShoppingTask.setStatus(dev.domain.TaskStatusEnum.DONE);
+        Task updateShoppingTask = (Task) manager.getTask(0).clone();
+        updateShoppingTask.setStatus(TaskStatusEnum.DONE);
         manager.update(updateShoppingTask);
 
         System.out.println("Результат:");
-        dev.utils.ReportUtils.printTasksCollection(manager.getHighLevelTasks());
+        ReportUtils.printTasksCollection(manager.getHighLevelTasks());
 
-        System.out.println("\nПечатаем историю просмотра.");
-        dev.utils.ReportUtils.printTasksCollection(manager.getHistory());
+        System.out.println("\nПечатаем историю просмотра. (ТЗ №5: Ограничения на 10 позиций больше нет!)");
+        ReportUtils.printTasksCollection(manager.getHistory());
 
         System.out.println("\nВызываем задания 12 раз в цикле по одному.");
         List<Integer> taskIsCollection = manager.getAllTaskId();
@@ -165,13 +168,93 @@ public final class TestUtil {
             if (index >= taskIsCollection.size()) {
                 index = 0;
             }
-            dev.domain.TaskBase task = manager.getTaskBase(taskIsCollection.get(index));
+            TaskBase task = manager.getTaskBase(taskIsCollection.get(index));
             System.out.print((i + 1) + ") ");
-            dev.utils.ReportUtils.printTask(task);
+            ReportUtils.printTask(task);
             index++;
         }
 
+        System.out.println("\nПечатаем историю просмотра. (ТЗ №5: Ограничения на 10 позиций больше нет!)");
+        ReportUtils.printTasksCollection(manager.getHistory());
+
+        System.out.println("Тест по ТЗ №4 выполнен.");
+    }
+
+
+    public static void testSprint5(TaskManager manager) {
+        manager.removeAllTasks();
+        System.out.println("Тестирование приложения по условиям, заданным в техническом задании Спринта №5:");
+
+        System.out.println("\n1.\tСоздайте две задачи, эпик с тремя подзадачами и эпик без подзадач;");
+
+        int nextTaskId = CollectionUtils.getNextTaskId(manager.getAllTaskId());
+        Task task = new Task(nextTaskId, "Задача 1", "Создаю обычную задачу с индексом 0.");
+        manager.create(task);
+
+        nextTaskId = CollectionUtils.getNextTaskId(manager.getAllTaskId());
+        task = new Task(nextTaskId, "Задача 2", "Создаю обычную задачу с индексом 1.");
+        manager.create(task);
+
+        nextTaskId = CollectionUtils.getNextTaskId(manager.getAllTaskId());
+        Epic epic = new Epic(nextTaskId,
+                "Эпик-задача 1", "Создаю эпик-задачу с индексом 2, в которой будет создано три подзадачи.");
+        manager.create(epic);
+
+        nextTaskId = CollectionUtils.getNextTaskId(manager.getAllTaskId());
+        SubTask subtask = new SubTask(epic.getTaskId(), nextTaskId,
+                "Подзадача 1", "Создаю подзадачу с индексом 3.");
+        epic.create(subtask);
+
+        nextTaskId = CollectionUtils.getNextTaskId(manager.getAllTaskId());
+        subtask = new SubTask(epic.getTaskId(), nextTaskId,
+                "Подзадача 2", "Создаю подзадачу с индексом 4.");
+        epic.create(subtask);
+
+        nextTaskId = CollectionUtils.getNextTaskId(manager.getAllTaskId());
+        subtask = new SubTask(epic.getTaskId(), nextTaskId,
+                "Подзадача 3", "Создаю подзадачу с индексом 5.");
+        epic.create(subtask);
+
+        nextTaskId = CollectionUtils.getNextTaskId(manager.getAllTaskId());
+        epic = new Epic(nextTaskId,
+                "Эпик-задача 2", "Создаю эпик-задачу с индексом 6 без подзадач.");
+        manager.create(epic);
+
+        System.out.println("Результат:");
+        ReportUtils.printTasksCollection(manager.getHighLevelTasks());
+
+        System.out.println("\n2.\tЗапросите созданные задачи несколько раз в разном порядке;");
+        System.out.println("\nВызываю задачи 20 раз в случайном порядке.");
+        for (int i = 0; i < 20; i++) {
+            int randomId = (int) (Math.random() * 7);
+            TaskBase randomTask = manager.getTaskBase(randomId);
+            System.out.print((i + 1) + ") ");
+            ReportUtils.printTask(randomTask);
+        }
+
+        System.out.println("\n3.\tПосле каждого запроса выведите историю и убедитесь, что в ней нет повторов;");
+
         System.out.println("\nПечатаем историю просмотра.");
-        dev.utils.ReportUtils.printTasksCollection(manager.getHistory());
+        ReportUtils.printTasksCollection(manager.getHistory());
+
+        System.out.println("\n4.\tУдалите задачу, которая есть в истории, и проверьте," +
+                " что при печати она не будет выводиться;");
+
+        manager.removeTask(0);
+        System.out.println("\nУдалили задачу с идентификатором 0.");
+
+        System.out.println("\nПечатаем историю просмотра.");
+        ReportUtils.printTasksCollection(manager.getHistory());
+
+        System.out.println("\n5.\tУдалите эпик с тремя подзадачами и убедитесь, что из истории удалился как сам эпик," +
+                " так и все его подзадачи.");
+
+        manager.removeTask(2);
+        System.out.println("\nУдалили эпик с идентификатором 2.");
+
+        System.out.println("\nПечатаем историю просмотра.");
+        ReportUtils.printTasksCollection(manager.getHistory());
+
+        System.out.println("Тест по ТЗ №5 выполнен.");
     }
 }

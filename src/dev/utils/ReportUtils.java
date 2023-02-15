@@ -15,11 +15,11 @@ public final class ReportUtils {
             Epic epic = (Epic) task;
             System.out.println("=".repeat(LINE_LENGTH));
             printTask(epic, 0);
-            List<SubTask> subTasks = epic.getAllSubtasks();
-            if (subTasks.size() > 0) {
+            List<SubTask> subtasks = epic.getAllSubtasks();
+            if (subtasks.size() > 0) {
                 System.out.println("-".repeat(LINE_LENGTH));
                 System.out.println(" ".repeat(4) + "Список подзадач:");
-                for (TaskBase subtask : subTasks) {
+                for (TaskBase subtask : subtasks) {
                     System.out.println(" ".repeat(4) + "-".repeat(LINE_LENGTH - 4));
                     printTask(subtask, 4);
                 }

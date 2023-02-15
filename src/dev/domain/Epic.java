@@ -6,7 +6,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class Epic extends dev.domain.Task {
+
+public class Epic extends Task {
     private final List<Integer> subtasks;
 
     public Epic(int taskId, String name, String description) {
@@ -25,7 +26,8 @@ public class Epic extends dev.domain.Task {
             Managers.getDefault().create(subtask);
             updateStatus();
         } else {
-            throw new IndexOutOfBoundsException(String.format("Подзадача с идентификационным номером %d уже присутствует в коллекции.", subtask.getTaskId()));
+            throw new IndexOutOfBoundsException("Подзадача с идентификационным номером " +
+                    subtask.getTaskId() + " уже присутствует в коллекции.");
         }
     }
 
@@ -35,15 +37,16 @@ public class Epic extends dev.domain.Task {
             Managers.getDefault().update(subtask);
             updateStatus();
         } else {
-            throw new IndexOutOfBoundsException(String.format("Подзадача с идентификационным номером %d отсутствует в коллекции.", subtask.getTaskId()));
+            throw new IndexOutOfBoundsException("Подзадача с идентификационным номером " +
+                    subtask.getTaskId() + " отсутствует в коллекции.");
         }
     }
 
     public SubTask create(int taskId, String name, String description) {
-        SubTask addingSubTask = new SubTask(this.getTaskId(), taskId, name, description);
-        Managers.getDefault().create(addingSubTask);
+        SubTask addingSubtask = new SubTask(this.getTaskId(), taskId, name, description);
+        Managers.getDefault().create(addingSubtask);
         updateStatus();
-        return addingSubTask;
+        return addingSubtask;
     }
 
     public SubTask create(int taskId, String name) {
@@ -54,7 +57,8 @@ public class Epic extends dev.domain.Task {
         if (subtasks.contains(taskId)) {
             return Managers.getDefault().getSubtask(taskId);
         } else {
-            throw new IndexOutOfBoundsException(String.format("Идентификационный номер задачи %d отсутствует в коллекции.",taskId));
+            throw new IndexOutOfBoundsException("Идентификационный номер задачи " +
+                    taskId + " отсутствует в коллекции.");
         }
     }
 
@@ -63,7 +67,7 @@ public class Epic extends dev.domain.Task {
         subtasks.addAll(Managers.getDefault().getSubtasks().stream()
                 .filter(subtask -> subtask.getEpicId().equals(this.getTaskId()))
                 .map(AbstractTask::getTaskId)
-                .toList());
+                .collect(Collectors.toList()));
         if (subtasks.size() == 0) {
             status = TaskStatusEnum.NEW;
         } else {
@@ -100,7 +104,8 @@ public class Epic extends dev.domain.Task {
             }
             updateStatus();
         } else {
-            throw new IndexOutOfBoundsException(String.format("Идентификационный номер задачи %d отсутствует в коллекции.", taskId));
+            throw new IndexOutOfBoundsException("Идентификационный номер задачи " +
+                    taskId + " отсутствует в коллекции.");
         }
     }
 
