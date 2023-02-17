@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.Map;
 
 public class CustomLinkedList<E extends TaskBase> {
-    private Map<Integer, Node<E>> nodesMap = new HashMap<Integer, Node<E>>();
+    private final Map<Integer, Node<E>> nodesMap = new HashMap<Integer, Node<E>>();
     private Node<E> first;
     private Node<E> last;
 
@@ -20,13 +20,13 @@ public class CustomLinkedList<E extends TaskBase> {
 
 
     private void linkLast(E e) {
-        final Node<E> l = last;
-        final Node<E> newNode = new Node<>(l, e, null);
-        last = newNode;
-        if (l == null)
+        final Node<E> last = this.last;
+        final Node<E> newNode = new Node<>(last, e, null);
+        this.last = newNode;
+        if (last == null)
             first = newNode;
         else
-            l.next = newNode;
+            last.next = newNode;
     }
 
     public void remove(int id) {

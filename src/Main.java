@@ -5,6 +5,6 @@ public class Main {
 
     public static void main(String[] args) {
         System.out.println("Трекер задач");
-        MainMenu.Menu(Managers.getDefault());
+        MainMenu.menu(Managers.getDefault());
     }
 }

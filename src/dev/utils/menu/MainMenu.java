@@ -23,7 +23,7 @@ public class MainMenu {
         return scanner;
     }
 
-    public static void Menu(TaskManager manager) {
+    public static void menu(TaskManager manager) {
         Scanner scanner = getScanner();
 
         while (true) {
