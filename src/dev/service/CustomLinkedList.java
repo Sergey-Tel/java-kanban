@@ -19,9 +19,9 @@ public class CustomLinkedList<E extends TaskBase> {
     }
 
 
-    private void linkLast(E e) {
+    private void linkLast(E Element) {
         final Node<E> last = this.last;
-        final Node<E> newNode = new Node<>(last, e, null);
+        final Node<E> newNode = new Node<>(last, Element, null);
         this.last = newNode;
         if (last == null)
             first = newNode;
@@ -58,12 +58,12 @@ public class CustomLinkedList<E extends TaskBase> {
 
     public void clear() {
         nodesMap.clear();
-        for (Node<E> x = first; x != null; ) {
-            Node<E> next = x.next;
-            x.item = null;
-            x.next = null;
-            x.prev = null;
-            x = next;
+        for (Node<E> first1 = first; first1 != null; ) {
+            Node<E> next = first1.next;
+            first1.item = null;
+            first1.next = null;
+            first1.prev = null;
+            first1 = next;
         }
         first = last = null;
     }
@@ -71,8 +71,8 @@ public class CustomLinkedList<E extends TaskBase> {
 
     public List<E> getTasks() {
         List<E> result = new ArrayList<>();
-        for (Node<E> x = first; x != null; x = x.next) {
-            result.add(x.item);
+        for (Node<E> first1 = first; first1 != null; first1 = first1.next) {
+            result.add(first1.item);
         }
         return result;
     }
