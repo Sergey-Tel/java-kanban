@@ -69,6 +69,4 @@ public interface TaskManager {
     void removeTask(int taskId);
 
     void removeAllTasks();
-
-    List<TaskBase> getHistory();
 }

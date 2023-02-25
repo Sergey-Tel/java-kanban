@@ -17,6 +17,7 @@ public class InMemoryHistoryManager implements HistoryManager {
         history.add(task);
     }
 
+
     @Override
     public void remove(int id) {
         history.remove(id);
@@ -26,6 +27,11 @@ public class InMemoryHistoryManager implements HistoryManager {
     @Override
     public List<TaskBase> getHistory() {
         return history.getTasks();
+    }
+
+    @Override
+    public List<Integer> getHistoryId() {
+        return history.getTasksId();
     }
 
     @Override

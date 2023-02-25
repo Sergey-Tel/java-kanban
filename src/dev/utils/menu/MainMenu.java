@@ -1,6 +1,7 @@
 package dev.utils.menu;
 
 import dev.domain.TaskBase;
+import dev.service.Managers;
 import dev.service.TaskManager;
 import dev.utils.ReportUtils;
 import dev.utils.TestUtil;
@@ -49,7 +50,7 @@ public class MainMenu {
                     removeTask(manager);
                     break;
                 case "7":
-                    getHistory(manager);
+                    getHistory();
                     break;
                 case "8":
                     TestUtil.testSprint3(manager);
@@ -76,7 +77,7 @@ public class MainMenu {
         if (isNotNullTasks(manager)) {
             System.out.println("Список всех задач:");
             List<TaskBase> tasks = manager.getHighLevelTasks();
-            ReportUtils.printTasksCollection(tasks);
+            ReportUtils.printTasksCollection(tasks, true);
         }
     }
 
@@ -92,7 +93,7 @@ public class MainMenu {
             System.out.println("Получение задачи по ее идентификатору");
             TaskBase task = inputTask(manager);
             if (task != null) {
-                ReportUtils.printTask(task);
+                ReportUtils.printTask(task, true);
                 System.out.println("=".repeat(ReportUtils.LINE_LENGTH));
             }
         }
@@ -117,10 +118,10 @@ public class MainMenu {
         }
     }
 
-    static void getHistory(TaskManager manager) {
+    static void getHistory() {
         System.out.println("Вывод истории просмотра");
-        List<TaskBase> tasks = manager.getHistory();
-        ReportUtils.printTasksCollection(tasks);
+        List<TaskBase> tasks = Managers.getDefaultHistory().getHistory();
+        ReportUtils.printTasksCollection(tasks, false);
     }
 
     static boolean isNotNullTasks(TaskManager manager) {

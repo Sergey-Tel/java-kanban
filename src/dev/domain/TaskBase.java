@@ -8,4 +8,6 @@ public interface TaskBase extends Cloneable, Comparable<TaskBase> {
     String getDescription();
 
     TaskStatusEnum getStatus();
+
+    String toString(String separator);
 }

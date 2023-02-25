@@ -1,6 +1,5 @@
 package dev.domain;
 
-
 abstract class AbstractTask implements TaskBase {
     private final int taskId;
     protected TaskStatusEnum status;
@@ -53,6 +52,9 @@ abstract class AbstractTask implements TaskBase {
     }
 
     @Override
+    public abstract String toString(String separator) ;
+
+    @Override
     public int compareTo(TaskBase o) {
         return Integer.compare(taskId, o.getTaskId());
     }
@@ -65,5 +67,4 @@ abstract class AbstractTask implements TaskBase {
 
     @Override
     public abstract int hashCode();
-
 }

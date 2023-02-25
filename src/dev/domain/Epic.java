@@ -43,10 +43,10 @@ public class Epic extends Task {
     }
 
     public SubTask create(int taskId, String name, String description) {
-        SubTask addingSubtask = new SubTask(this.getTaskId(), taskId, name, description);
-        Managers.getDefault().create(addingSubtask);
+        SubTask addingSubTask = new SubTask(this.getTaskId(), taskId, name, description);
+        Managers.getDefault().create(addingSubTask);
         updateStatus();
-        return addingSubtask;
+        return addingSubTask;
     }
 
     public SubTask create(int taskId, String name) {
@@ -133,6 +133,23 @@ public class Epic extends Task {
                 ", status=" + status.title + '\'' +
                 ", size=" + size() +
                 '}';
+    }
+
+    @Override
+    public String toString(String separator) {
+        return String.format(
+                "%s" + separator +
+                        "%s" + separator +
+                        "%s" + separator +
+                        "%s" + separator +
+                        "%s" + separator +
+                        "%d\n",
+                getTaskId(),
+                TaskTypeEnum.EPIC.key,
+                getName(),
+                getStatus().key,
+                getDescription(),
+                0);
     }
 
     @Override

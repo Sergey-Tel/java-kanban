@@ -1,9 +1,11 @@
 package dev.service;
 
+import java.io.File;
+
 
 public class Managers {
-    static TaskManager taskManager;
-    static HistoryManager historyManager;
+    private static TaskManager taskManager;
+    private static HistoryManager historyManager;
 
     public static TaskManager getDefault() {
         if (taskManager == null) {
@@ -11,6 +13,15 @@ public class Managers {
         }
         return taskManager;
     }
+
+    public static void SetFileTasksManager(File file){
+        taskManager = FileBackedTaskManager.loadFromFile(file);
+    }
+
+    public static void SetMemoryTasksManager(){
+        taskManager = new InMemoryTaskManager();
+    }
+
 
     public static HistoryManager getDefaultHistory() {
         if (historyManager == null) {

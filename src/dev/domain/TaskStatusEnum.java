@@ -6,7 +6,7 @@ public enum TaskStatusEnum {
     DONE("Задача выполнена", "3");
 
     public final String title;
-    private final String key;
+    public final String key;
 
     TaskStatusEnum(String title, String key) {
         this.title = title;
@@ -38,5 +38,14 @@ public enum TaskStatusEnum {
 
     private String toCommandItem() {
         return key + "\t" + title + ";";
+    }
+
+    public static TaskStatusEnum fromKey(String key) {
+        for (TaskStatusEnum command : values()) {
+            if (command.key.equals(key)) {
+                return command;
+            }
+        }
+        return TaskStatusEnum.NEW;
     }
 }

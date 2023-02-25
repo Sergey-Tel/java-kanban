@@ -30,6 +30,23 @@ public class Task extends AbstractTask {
     }
 
     @Override
+    public String toString(String separator) {
+        return String.format(
+                "%s" + separator +
+                        "%s" + separator +
+                        "%s" + separator +
+                        "%s" + separator +
+                        "%s" + separator +
+                        "%d\n",
+                getTaskId(),
+                TaskTypeEnum.TASK.key,
+                getName(),
+                getStatus().key,
+                getDescription(),
+                0);
+    }
+
+    @Override
     public Object clone() {
         return new Task(this.getTaskId(), this.getName(), this.getDescription(), this.status);
     }

@@ -1,6 +1,7 @@
 package dev.utils.menu;
 
 import dev.domain.TaskStatusEnum;
+import dev.domain.TaskTypeEnum;
 
 import static dev.utils.menu.DialogsInput.BACK_KEYS;
 import static dev.utils.menu.DialogsInput.EXIT_KEYS;
@@ -38,9 +39,9 @@ public class DialogsPrint {
     public static void printTaskTypeMenu() {
         out.println();
         out.println("Укажите тип создаваемой задачи:");
-        out.println("1\tОбычная задача;");
-        out.println("2\tЭпик-задача;");
-        out.println("3\tПодзадача;");
+        out.printf("%s\t%s;%n", TaskTypeEnum.TASK.key, TaskTypeEnum.TASK.title);
+        out.printf("%s\t%s;%n", TaskTypeEnum.EPIC.key, TaskTypeEnum.EPIC.title);
+        out.printf("%s\t%s;%n", TaskTypeEnum.SUBTASK.key, TaskTypeEnum.SUBTASK.title);
         out.println(BACK_KEYS + "\tВозврат в основное меню.");
     }
 

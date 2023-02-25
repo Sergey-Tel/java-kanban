@@ -9,5 +9,6 @@ public interface HistoryManager {
     void add(TaskBase task);
     void remove(int id);
     List<TaskBase> getHistory();
+    List<Integer> getHistoryId();
     void clear();
 }
