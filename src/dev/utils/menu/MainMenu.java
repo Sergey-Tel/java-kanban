@@ -61,6 +61,9 @@ public class MainMenu {
                 case "10":
                     TestUtil.testSprint5(manager);
                     break;
+                case "11":
+                    TestUtil.testSprint6();
+                    break;
                 case EXIT_KEYS:
                     System.out.println("Завершение работы приложения");
                     scanner.close();

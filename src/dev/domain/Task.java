@@ -5,6 +5,7 @@ public class Task extends AbstractTask {
     public Task(int taskId, String name, String description, TaskStatusEnum status) {
         super(taskId, name, description);
         this.status = status;
+        this.type = TaskTypeEnum.TASK;
     }
 
     public Task(int taskId, String name, String description) {

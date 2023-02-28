@@ -7,6 +7,7 @@ public class SubTask extends Task {
     public SubTask(Integer parentEpicId, int taskId, String name, String description, TaskStatusEnum status) {
         super(taskId, name, description, status);
         this.parentEpicId = parentEpicId;
+        this.type = TaskTypeEnum.SUBTASK;
     }
 
     public SubTask(Integer parentEpicId, int taskId, String name, String description) {

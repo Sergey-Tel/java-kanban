@@ -1,6 +1,6 @@
 package dev.domain;
 
-public interface TaskBase extends Cloneable, Comparable<TaskBase> {
+public interface TaskBase extends  Comparable<TaskBase> {
     int getTaskId();
 
     String getName();
@@ -10,4 +10,7 @@ public interface TaskBase extends Cloneable, Comparable<TaskBase> {
     TaskStatusEnum getStatus();
 
     String toString(String separator);
+
+    TaskTypeEnum getType();
+
 }

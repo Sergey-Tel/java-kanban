@@ -10,6 +10,9 @@ import java.nio.file.Path;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static dev.domain.TaskTypeEnum.EPIC;
+import static dev.domain.TaskTypeEnum.SUBTASK;
+
 public class FileBackedTaskManager extends InMemoryTaskManager {
 
     private static final String PARAM_SEPARATOR = "|";
@@ -27,71 +30,6 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
         this.file = file;
     }
 
-
-    public static void main(String[] args) {
-        System.out.println("Тестирование приложения по условиям, заданным в техническом задании Спринта №6:");
-
-        Path path = FileSystems.getDefault().getPath("java-kanban.csv");
-        Managers.SetFileTasksManager(path.toFile());
-
-        TaskManager manager = Managers.getDefault();
-        manager.removeAllTasks();
-
-        System.out.println("\n1.\tЗаведите несколько разных задач, эпиков и подзадач;");
-        int nextTaskId = CollectionUtils.getNextTaskId(manager.getAllTaskId());
-        Task task = new Task(nextTaskId, "Задача 1", "Создаю обычную задачу с индексом 0.");
-        manager.create(task);
-
-        nextTaskId = CollectionUtils.getNextTaskId(manager.getAllTaskId());
-        task = new Task(nextTaskId, "Задача 2", "Создаю обычную задачу с индексом 1.");
-        manager.create(task);
-
-        nextTaskId = CollectionUtils.getNextTaskId(manager.getAllTaskId());
-        Epic epic = new Epic(nextTaskId,
-                "Эпик-задача 1", "Создаю эпик-задачу с индексом 2, в которой будет создано три подзадачи.");
-        manager.create(epic);
-
-        nextTaskId = CollectionUtils.getNextTaskId(manager.getAllTaskId());
-        SubTask subtask = new SubTask(epic.getTaskId(), nextTaskId,
-                "Подзадача 1", "Создаю подзадачу с индексом 3.");
-        epic.create(subtask);
-
-        nextTaskId = CollectionUtils.getNextTaskId(manager.getAllTaskId());
-        subtask = new SubTask(epic.getTaskId(), nextTaskId,
-                "Подзадача 2", "Создаю подзадачу с индексом 4.");
-        epic.create(subtask);
-
-        nextTaskId = CollectionUtils.getNextTaskId(manager.getAllTaskId());
-        subtask = new SubTask(epic.getTaskId(), nextTaskId,
-                "Подзадача 3", "Создаю подзадачу с индексом 5.");
-        epic.create(subtask);
-
-        nextTaskId = CollectionUtils.getNextTaskId(manager.getAllTaskId());
-        epic = new Epic(nextTaskId,
-                "Эпик-задача 2", "Создаю эпик-задачу с индексом 6 без подзадач.");
-        manager.create(epic);
-
-        System.out.println("Результат:");
-        ReportUtils.printTasksCollection(manager.getHighLevelTasks(), false);
-
-        System.out.println("\n2.\tЗапросите некоторые из них, чтобы заполнилась история просмотра;");
-        System.out.println("\nВызываю задачи 20 раз в случайном порядке.");
-        for (int i = 0; i < 20; i++) {
-            int randomId = (int) (Math.random() * 7);
-            TaskBase randomTask = manager.getTaskBase(randomId);
-            System.out.print((i + 1) + ") ");
-            ReportUtils.printTask(randomTask, false);
-        }
-        System.out.println("\nПечатаем историю просмотра.");
-        ReportUtils.printTasksCollection(Managers.getDefaultHistory().getHistory(), false);
-
-        System.out.println("\n3.\tСоздаем новый FileBackedTasksManager менеджер из этого же файла.;");
-        manager = FileBackedTaskManager.loadFromFile(path.toFile());
-
-        System.out.println("\nПечатаем историю просмотра.");
-        ReportUtils.printTasksCollection(Managers.getDefaultHistory().getHistory(), false);
-    }
-
     public static FileBackedTaskManager loadFromFile(File file) {
         FileBackedTaskManager manager = new FileBackedTaskManager(file);
         Managers.getDefaultHistory().clear();
@@ -105,7 +43,7 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
                         if (task instanceof Epic) {
                             manager.epics.put(task.getTaskId(), (Epic) task);
                         } else if (task instanceof SubTask) {
-                            manager.subtasks.put(task.getTaskId(),(SubTask) task);
+                            manager.subtasks.put(task.getTaskId(), (SubTask) task);
                             Epic epic = manager.getEpic(((SubTask) task).getEpicId());
                             epic.updateStatus();
                         } else {
@@ -137,13 +75,13 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
         TaskStatusEnum status = TaskStatusEnum.fromKey(param[3]);
         int epicId = Integer.parseInt(param[5]);
         switch (type) {
-            case EPIC: {
+            case EPIC -> {
                 return new Epic(taskId, param[2], param[4]);
             }
-            case SUBTASK: {
+            case SUBTASK -> {
                 return new SubTask(epicId, taskId, param[2], param[4], status);
             }
-            default: {
+            default -> {
                 return new Task(taskId, param[2], param[4], status);
             }
         }
@@ -218,9 +156,9 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
 
     @Override
     public int create(TaskBase task) {
-        if (task instanceof Epic) {
+        if (task.getType() == EPIC) {
             return create((Epic) task);
-        } else if (task instanceof SubTask) {
+        } else if (task.getType() == SUBTASK) {
             return create((SubTask) task);
         } else {
             return create((Task) task);

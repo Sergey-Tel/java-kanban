@@ -1,9 +1,15 @@
 package dev.utils;
 
 import dev.domain.*;
+import dev.service.FileBackedTaskManager;
 import dev.service.Managers;
 import dev.service.TaskManager;
 
+import java.io.IOException;
+import java.nio.file.FileSystems;
+import java.nio.file.Path;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -256,5 +262,68 @@ public final class TestUtil {
         ReportUtils.printTasksCollection(Managers.getDefaultHistory().getHistory(), false);
 
         System.out.println("Тест по ТЗ №5 выполнен.");
+    }
+    public static void testSprint6() {
+        System.out.println("Тестирование приложения по условиям, заданным в техническом задании Спринта №6:");
+
+        Path path = FileSystems.getDefault().getPath("java-kanban.csv");
+        Managers.SetFileTasksManager(path.toFile());
+
+        TaskManager manager = Managers.getDefault();
+        manager.removeAllTasks();
+
+        System.out.println("\n1.\tЗаведите несколько разных задач, эпиков и подзадач;");
+        int nextTaskId = CollectionUtils.getNextTaskId(manager.getAllTaskId());
+        Task task = new Task(nextTaskId, "Задача 1", "Создаю обычную задачу с индексом 0.");
+        manager.create(task);
+
+        nextTaskId = CollectionUtils.getNextTaskId(manager.getAllTaskId());
+        task = new Task(nextTaskId, "Задача 2", "Создаю обычную задачу с индексом 1.");
+        manager.create(task);
+
+        nextTaskId = CollectionUtils.getNextTaskId(manager.getAllTaskId());
+        Epic epic = new Epic(nextTaskId,
+                "Эпик-задача 1", "Создаю эпик-задачу с индексом 2, в которой будет создано три подзадачи.");
+        manager.create(epic);
+
+        nextTaskId = CollectionUtils.getNextTaskId(manager.getAllTaskId());
+        SubTask subtask = new SubTask(epic.getTaskId(), nextTaskId,
+                "Подзадача 1", "Создаю подзадачу с индексом 3.");
+        epic.create(subtask);
+
+        nextTaskId = CollectionUtils.getNextTaskId(manager.getAllTaskId());
+        subtask = new SubTask(epic.getTaskId(), nextTaskId,
+                "Подзадача 2", "Создаю подзадачу с индексом 4.");
+        epic.create(subtask);
+
+        nextTaskId = CollectionUtils.getNextTaskId(manager.getAllTaskId());
+        subtask = new SubTask(epic.getTaskId(), nextTaskId,
+                "Подзадача 3", "Создаю подзадачу с индексом 5.");
+        epic.create(subtask);
+
+        nextTaskId = CollectionUtils.getNextTaskId(manager.getAllTaskId());
+        epic = new Epic(nextTaskId,
+                "Эпик-задача 2", "Создаю эпик-задачу с индексом 6 без подзадач.");
+        manager.create(epic);
+
+        System.out.println("Результат:");
+        ReportUtils.printTasksCollection(manager.getHighLevelTasks(), false);
+
+        System.out.println("\n2.\tЗапросите некоторые из них, чтобы заполнилась история просмотра;");
+        System.out.println("\nВызываю задачи 20 раз в случайном порядке.");
+        for (int i = 0; i < 20; i++) {
+            int randomId = (int) (Math.random() * 7);
+            TaskBase randomTask = manager.getTaskBase(randomId);
+            System.out.print((i + 1) + ") ");
+            ReportUtils.printTask(randomTask, false);
+        }
+        System.out.println("\nПечатаем историю просмотра.");
+        ReportUtils.printTasksCollection(Managers.getDefaultHistory().getHistory(), false);
+
+        System.out.println("\n3.\tСоздаем новый FileBackedTasksManager менеджер из этого же файла.;");
+        manager = FileBackedTaskManager.loadFromFile(path.toFile());
+
+        System.out.println("\nПечатаем историю просмотра.");
+        ReportUtils.printTasksCollection(Managers.getDefaultHistory().getHistory(), false);
     }
 }

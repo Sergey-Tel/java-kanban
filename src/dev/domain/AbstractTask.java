@@ -5,12 +5,18 @@ abstract class AbstractTask implements TaskBase {
     protected TaskStatusEnum status;
     private String name;
     private String description;
+    protected TaskTypeEnum type;
 
     protected AbstractTask(int taskId, String name, String description) {
         this.taskId = taskId;
         this.name = name;
         this.description = description;
         this.status = TaskStatusEnum.NEW;
+    }
+
+    @Override
+    public TaskTypeEnum getType() {
+        return type;
     }
 
     @Override
@@ -52,7 +58,7 @@ abstract class AbstractTask implements TaskBase {
     }
 
     @Override
-    public abstract String toString(String separator) ;
+    public abstract String toString(String separator);
 
     @Override
     public int compareTo(TaskBase o) {

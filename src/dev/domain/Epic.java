@@ -14,6 +14,7 @@ public class Epic extends Task {
         super(taskId, name, description);
         this.subtasks = new ArrayList<>();
         this.status = TaskStatusEnum.NEW;
+        this.type = TaskTypeEnum.EPIC;
     }
 
     public Epic(int taskId, String name) {
