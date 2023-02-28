@@ -21,8 +21,8 @@ public class DialogsPrint {
         System.out.println("7\tВывести историю просмотра;");
         System.out.println("8\tТестирование приложения по ТЗ (Спринт №3);");
         System.out.println("9\tТестирование приложения по ТЗ (Спринт №4);");
-        System.out.println("10 *\tТестирование приложения по ТЗ (Спринт №5);");
-        System.out.println("10 *\tТестирование приложения по ТЗ (Спринт №6);");
+        System.out.println("10 \tТестирование приложения по ТЗ (Спринт №5);");
+        System.out.println("11 \tТестирование приложения по ТЗ (Спринт №6);");
         System.out.println(EXIT_KEYS + "\tЗавершение работы приложения.");
     }
 
