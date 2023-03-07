@@ -23,6 +23,16 @@ public class InMemoryHistoryManager implements HistoryManager {
         history.remove(id);
     }
 
+    @Override
+    public TaskBase getFirst() {
+        return history.getFirst();
+    }
+
+    @Override
+    public TaskBase getLast() {
+        return history.getLast();
+    }
+
 
     @Override
     public List<TaskBase> getHistory() {

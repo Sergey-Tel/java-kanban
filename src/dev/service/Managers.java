@@ -4,29 +4,29 @@ import java.io.File;
 
 
 public class Managers {
-    private static TaskManager taskManager;
-    private static HistoryManager historyManager;
+    static TasksManager tasksManager;
 
-    public static TaskManager getDefault() {
-        if (taskManager == null) {
-            taskManager = new InMemoryTaskManager();
+    private Managers(){}
+
+    public static TasksManager getDefault() {
+        if (tasksManager == null) {
+            tasksManager = new InMemoryTasksManager();
         }
-        return taskManager;
+        return tasksManager;
     }
 
-    public static void SetFileTasksManager(File file){
-        taskManager = FileBackedTaskManager.loadFromFile(file);
+    public static FileBackedTasksManager setFileTasksManager(File file) {
+        tasksManager = FileBackedTasksManager.loadFromFile(file);
+        return (FileBackedTasksManager) tasksManager;
     }
 
-    public static void SetMemoryTasksManager(){
-        taskManager = new InMemoryTaskManager();
+    public static InMemoryTasksManager setMemoryTasksManager() {
+        tasksManager = new InMemoryTasksManager();
+        return (InMemoryTasksManager) tasksManager;
     }
 
 
-    public static HistoryManager getDefaultHistory() {
-        if (historyManager == null) {
-            historyManager = new InMemoryHistoryManager();
-        }
-        return historyManager;
+    public static InMemoryHistoryManager getDefaultHistory() {
+        return new InMemoryHistoryManager();
     }
 }

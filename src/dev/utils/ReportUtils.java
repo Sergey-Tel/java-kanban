@@ -1,10 +1,13 @@
 package dev.utils;
 
 import dev.domain.Epic;
-import dev.domain.SubTask;
+import dev.domain.Subtask;
 import dev.domain.Task;
 import dev.domain.TaskBase;
 
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 public final class ReportUtils {
@@ -15,11 +18,11 @@ public final class ReportUtils {
             Epic epic = (Epic) task;
             System.out.println("=".repeat(LINE_LENGTH));
             printTask(epic, 0);
-            List<SubTask> subTasks = epic.getAllSubtasks();
-            if (printAttachSubtask && subTasks.size() > 0) {
+            List<Subtask> subtasks = epic.getAllSubtasks();
+            if (printAttachSubtask && subtasks.size() > 0) {
                 System.out.println("-".repeat(LINE_LENGTH));
                 System.out.println(" ".repeat(4) + "Список подзадач:");
-                for (TaskBase subtask : subTasks) {
+                for (TaskBase subtask : subtasks) {
                     System.out.println(" ".repeat(4) + "-".repeat(LINE_LENGTH - 4));
                     printTask(subtask, 4);
                 }
@@ -36,19 +39,26 @@ public final class ReportUtils {
         System.out.print(" ".repeat(margin) + "Тип: ");
         if (task instanceof Epic) {
             System.out.println("Эпик-задача;");
-        } else if (task instanceof SubTask) {
+        } else if (task instanceof Subtask) {
             System.out.println("Подзадача;");
             System.out.println(" ".repeat(margin) + "Идентификатор эпик-задачи: " +
-                    ((SubTask) task).getEpicId() + ";");
+                    ((Subtask) task).getEpicId() + ";");
         } else if (task instanceof Task) {
             System.out.println("Задача;");
         } else {
             System.out.println("-;");
         }
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy, HH:mm");
+
         System.out.println(" ".repeat(margin) + "Название: " + task.getName() + ";");
         System.out.println(" ".repeat(margin) + "Описание: " + task.getDescription() + ";");
         System.out.println(" ".repeat(margin) + "Идентификатор: " + task.getTaskId() + ";");
         System.out.println(" ".repeat(margin) + "Статус: " + task.getStatus().title + ".");
+        System.out.println(" ".repeat(margin) + "Дата начала: " + (task.getStartTime().isPresent() ?
+                LocalDateTime.ofInstant(task.getStartTime().get(), ZoneId.systemDefault()).format(formatter) : "- ") + ".");
+        System.out.println(" ".repeat(margin) + "Продолжительность: " + task.getDuration() + " мин.");
+        System.out.println(" ".repeat(margin) + "Дата окончания: " + (task.getEndTime().isPresent() ?
+                LocalDateTime.ofInstant(task.getEndTime().get(), ZoneId.systemDefault()).format(formatter) : "- ") + ".");
     }
 
     public static void printTasksCollection(List<TaskBase> tasks, boolean printAttachSubtask) {

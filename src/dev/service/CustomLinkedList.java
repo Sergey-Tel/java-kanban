@@ -12,6 +12,14 @@ public class CustomLinkedList<E extends TaskBase> {
     private Node<E> first;
     private Node<E> last;
 
+    public E getFirst() {
+        return first.item;
+    }
+
+    public E getLast () {
+        return last.item;
+    }
+
     public void add(E task) {
         remove(task.getTaskId());
         linkLast(task);
@@ -20,13 +28,13 @@ public class CustomLinkedList<E extends TaskBase> {
 
 
     private void linkLast(E element) {
-        final Node<E> last = this.last;
-        final Node<E> newNode = new Node<>(last, element, null);
-        this.last = newNode;
-        if (last == null)
+        final Node<E> last1 = last;
+        final Node<E> newNode = new Node<>(last1, element, null);
+        last = newNode;
+        if (last1 == null)
             first = newNode;
         else
-            last.next = newNode;
+            last1.next = newNode;
     }
 
     public void remove(int id) {

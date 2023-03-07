@@ -1,24 +1,32 @@
 package dev.service;
 
-import dev.domain.Epic;
-import dev.domain.SubTask;
-import dev.domain.Task;
-import dev.domain.TaskBase;
+import dev.domain.*;
 import dev.utils.CollectionUtils;
 
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-public class InMemoryTaskManager implements TaskManager {
+public class InMemoryTasksManager implements TasksManager {
     protected final Map<Integer, Task> tasks;
     protected final Map<Integer, Epic> epics;
-    protected final Map<Integer, SubTask> subtasks;
+    protected final Map<Integer, Subtask> subtasks;
+    protected final Set<TaskBase> prioritizedTasks;
+    protected final TaskPlanner planner;
+    protected final HistoryManager historyManager;
 
-    public InMemoryTaskManager() {
+    public InMemoryTasksManager() {
         tasks = new HashMap<>();
         epics = new HashMap<>();
         subtasks = new HashMap<>();
+        prioritizedTasks = new TreeSet<>(new TaskComparator());
+        historyManager = Managers.getDefaultHistory();
+        planner = new TaskPlanner();
+    }
+
+    @Override
+    public HistoryManager getHistoryManager() {
+        return historyManager;
     }
 
     @Override
@@ -32,7 +40,7 @@ public class InMemoryTaskManager implements TaskManager {
     }
 
     @Override
-    public List<SubTask> getSubtasks() {
+    public List<Subtask> getSubtasks() {
         return new ArrayList<>(subtasks.values());
     }
 
@@ -55,45 +63,39 @@ public class InMemoryTaskManager implements TaskManager {
     }
 
     @Override
-    public Task createTask(String name) {
-        int newTaskId = CollectionUtils.getNextTaskId(getAllTaskId());
-        Task addingTask = new Task(newTaskId, name);
-        tasks.put(newTaskId, addingTask);
-        return addingTask;
+    public List<TaskBase> getPrioritizedTasks() {
+        return new LinkedList<TaskBase>(prioritizedTasks);
     }
 
     @Override
     public Epic createEpic(String name) {
         int newTaskId = CollectionUtils.getNextTaskId(getAllTaskId());
         Epic addingEpic = new Epic(newTaskId, name);
-        addingEpic.setName(name);
         epics.put(newTaskId, addingEpic);
         return addingEpic;
     }
 
     @Override
-    public SubTask createSubtask(int epicId, String name) {
+    public Task createTask(String name) {
+        int newTaskId = CollectionUtils.getNextTaskId(getAllTaskId());
+        Task task = new Task(newTaskId, name);
+        tasks.put(newTaskId, task);
+        prioritizedTasks.add(task);
+        return task;
+    }
+
+    @Override
+    public Subtask createSubtask(int epicId, String name) {
         if (epics.containsKey(epicId)) {
             int newTaskId = CollectionUtils.getNextTaskId(getAllTaskId());
-            SubTask subtask = new SubTask(epicId, newTaskId, name);
+            Subtask subtask = new Subtask(epicId, newTaskId, name);
             subtasks.put(newTaskId, subtask);
+            prioritizedTasks.add(subtask);
             Epic epic = epics.get(epicId);
             epic.updateStatus();
             return subtask;
         } else {
             throw new IndexOutOfBoundsException("Идентификационный номер эпик-задачи отсутствует в коллекции.");
-        }
-    }
-
-
-    @Override
-    public int create(Task task) {
-        if (tasks.containsKey(task.getTaskId())) {
-            throw new IndexOutOfBoundsException("Задача с идентификационным номером "
-                    + task.getTaskId() + " уже была создана ранее.");
-        } else {
-            tasks.put(task.getTaskId(), task);
-            return task.getTaskId();
         }
     }
 
@@ -111,15 +113,20 @@ public class InMemoryTaskManager implements TaskManager {
 
 
     @Override
-    public int create(SubTask subtask) {
-        if (subtasks.containsKey(subtask.getTaskId())) {
-            throw new IndexOutOfBoundsException("Подзадача с идентификационным номером " +
-                    subtask.getTaskId() + " уже была создана ранее.");
+    public int create(Task task) {
+        Optional<TaskBase> currentTask = planner.getCurrentTask(task);
+        if (tasks.containsKey(task.getTaskId())) {
+            throw new IndexOutOfBoundsException("Задача с идентификационным номером "
+                    + task.getTaskId() + " уже была создана ранее.");
+        }
+        if (currentTask.isPresent()) {
+            throw new InvalidTaskDateException("Конфликт времени исполнения задач.",
+                    currentTask.get(), task);
         } else {
-            subtasks.put(subtask.getTaskId(), subtask);
-            Epic epic = epics.get(subtask.getEpicId());
-            if (epic !=null) epic.updateStatus();
-            return subtask.getTaskId();
+            tasks.put(task.getTaskId(), task);
+            prioritizedTasks.add(task);
+            planner.add(task);
+            return task.getTaskId();
         }
     }
 
@@ -127,8 +134,8 @@ public class InMemoryTaskManager implements TaskManager {
     public int create(TaskBase task) {
         if (task instanceof Epic) {
             return create((Epic) task);
-        } else if (task instanceof SubTask) {
-            return create((SubTask) task);
+        } else if (task instanceof Subtask) {
+            return create((Subtask) task);
         } else {
             return create((Task) task);
         }
@@ -136,9 +143,41 @@ public class InMemoryTaskManager implements TaskManager {
 
 
     @Override
+    public int create(Subtask subtask) {
+        Optional<TaskBase> currentTask = planner.getCurrentTask(subtask);
+        if (subtasks.containsKey(subtask.getTaskId())) {
+            throw new IndexOutOfBoundsException("Подзадача с идентификационным номером " +
+                    subtask.getTaskId() + " уже была создана ранее.");
+        } else if (currentTask.isPresent()) {
+            throw new InvalidTaskDateException("Конфликт времени исполнения задач.",
+                    currentTask.get(), subtask);
+        } else if (!epics.containsKey(subtask.getEpicId())) {
+            throw new IndexOutOfBoundsException("Идентификационный номер эпик-задачи отсутствует в коллекции.");
+        } else {
+            subtasks.put(subtask.getTaskId(), subtask);
+            prioritizedTasks.add(subtask);
+            planner.add(subtask);
+            Epic epic = epics.get(subtask.getEpicId());
+            if (epic != null) epic.updateStatus();
+            return subtask.getTaskId();
+        }
+    }
+
+
+    @Override
     public void update(Task task) {
         if (tasks.containsKey(task.getTaskId())) {
+            Optional<TaskBase> currentTask = planner.getCurrentTask(task);
+            if (currentTask.isPresent()) {
+                throw new InvalidTaskDateException("Конфликт времени исполнения задач.",
+                        currentTask.get(), task);
+            }
+            Task oldTask = tasks.get(task.getTaskId());
+            prioritizedTasks.remove(oldTask);
+            planner.remove(oldTask);
             tasks.put(task.getTaskId(), task);
+            prioritizedTasks.add(task);
+            planner.add(task);
         } else {
             throw new IndexOutOfBoundsException("Задача с заданным идентификационным номером отсутствует" +
                     " в коллекции.");
@@ -150,21 +189,9 @@ public class InMemoryTaskManager implements TaskManager {
     public void update(Epic epic) {
         if (epics.containsKey(epic.getTaskId())) {
             epics.put(epic.getTaskId(), epic);
-        } else {
-            throw new IndexOutOfBoundsException("Эпик-задача с заданным идентификационным номером отсутствует" +
-                    " в коллекции.");
-        }
-    }
-
-
-    @Override
-    public void update(SubTask subtask) {
-        if (subtasks.containsKey(subtask.getTaskId())) {
-            subtasks.put(subtask.getTaskId(), subtask);
-            Epic epic = epics.get(subtask.getEpicId());
             epic.updateStatus();
         } else {
-            throw new IndexOutOfBoundsException("Подзадача с заданным идентификационным номером отсутствует" +
+            throw new IndexOutOfBoundsException("Эпик-задача с заданным идентификационным номером отсутствует" +
                     " в коллекции.");
         }
     }
@@ -174,10 +201,33 @@ public class InMemoryTaskManager implements TaskManager {
     public void update(TaskBase task) {
         if (task instanceof Epic) {
             update((Epic) task);
-        } else if (task instanceof SubTask) {
-            update((SubTask) task);
+        } else if (task instanceof Subtask) {
+            update((Subtask) task);
         } else {
             update((Task) task);
+        }
+    }
+
+
+    @Override
+    public void update(Subtask subtask) {
+        if (subtasks.containsKey(subtask.getTaskId())) {
+            Optional<TaskBase> currentTask = planner.getCurrentTask(subtask);
+            if (currentTask.isPresent()) {
+                throw new InvalidTaskDateException("Конфликт времени исполнения задач.",
+                        currentTask.get(), subtask);
+            }
+            Subtask oldSubtask = subtasks.get(subtask.getTaskId());
+            prioritizedTasks.remove(oldSubtask);
+            planner.remove(oldSubtask);
+            subtasks.put(subtask.getTaskId(), subtask);
+            prioritizedTasks.add(subtask);
+            planner.add(subtask);
+            Epic epic = epics.get(subtask.getEpicId());
+            epic.updateStatus();
+        } else {
+            throw new IndexOutOfBoundsException("Подзадача с заданным идентификационным номером отсутствует" +
+                    " в коллекции.");
         }
     }
 
@@ -215,7 +265,7 @@ public class InMemoryTaskManager implements TaskManager {
     public Task getTask(int taskId) {
         if (tasks.containsKey(taskId)) {
             Task task = tasks.get(taskId);
-            Managers.getDefaultHistory().add(task);
+            historyManager.add(task);
             return task;
         } else {
             throw new IndexOutOfBoundsException("Задача с заданным идентификационным номером отсутствует в коллекции.");
@@ -226,7 +276,7 @@ public class InMemoryTaskManager implements TaskManager {
     public Epic getEpic(int taskId) {
         if (epics.containsKey(taskId)) {
             Epic epic = epics.get(taskId);
-            Managers.getDefaultHistory().add(epic);
+            historyManager.add(epic);
             return epic;
         } else {
             throw new IndexOutOfBoundsException("Эпик-задача с заданным идентификационным номером "
@@ -235,10 +285,10 @@ public class InMemoryTaskManager implements TaskManager {
     }
 
     @Override
-    public SubTask getSubtask(int taskId) {
+    public Subtask getSubtask(int taskId) {
         if (subtasks.containsKey(taskId)) {
-            SubTask subtask = subtasks.get(taskId);
-            Managers.getDefaultHistory().add(subtask);
+            Subtask subtask = subtasks.get(taskId);
+            historyManager.add(subtask);
             return subtask;
         } else {
             throw new IndexOutOfBoundsException("Подзадача с заданным идентификационным номером "
@@ -282,20 +332,28 @@ public class InMemoryTaskManager implements TaskManager {
     @Override
     public void removeTask(int taskId) {
         if (tasks.containsKey(taskId)) {
+            Task task = tasks.get(taskId);
             tasks.remove(taskId);
-            Managers.getDefaultHistory().remove(taskId);
+            prioritizedTasks.remove(task);
+            planner.remove(task);
+            historyManager.remove(taskId);
         } else if (epics.containsKey(taskId)) {
             for (Integer subtaskId : epics.get(taskId).subtaskIdList()) {
+                Subtask subtask = subtasks.get(subtaskId);
+                prioritizedTasks.remove(subtask);
+                planner.remove(subtask);
                 subtasks.remove(subtaskId);
-                Managers.getDefaultHistory().remove(subtaskId);
+                historyManager.remove(subtaskId);
             }
             epics.remove(taskId);
-            Managers.getDefaultHistory().remove(taskId);
+            historyManager.remove(taskId);
         } else if (subtasks.containsKey(taskId)) {
-            SubTask subtask = subtasks.get(taskId);
+            Subtask subtask = subtasks.get(taskId);
+            prioritizedTasks.remove(subtask);
+            planner.remove(subtask);
             Epic epic = epics.get(subtask.getEpicId());
             subtasks.remove(taskId);
-            Managers.getDefaultHistory().remove(taskId);
+            historyManager.remove(taskId);
             epic.updateStatus();
         } else {
             throw new IndexOutOfBoundsException("Идентификационный номер (эпик/под)задачи отсутствует в коллекции.");
@@ -304,9 +362,42 @@ public class InMemoryTaskManager implements TaskManager {
 
     @Override
     public void removeAllTasks() {
+        for (Task task : this.getTasks()) {
+            prioritizedTasks.remove(task);
+            planner.remove(task);
+            historyManager.remove(task.getTaskId());
+        }
+        tasks.clear();
+    }
+
+    @Override
+    public void removeAllEpics() {
+        removeAllSubtasks();
+        for (Epic epic : this.getEpics()) {
+            prioritizedTasks.remove(epic);
+            planner.remove(epic);
+            historyManager.remove(epic.getTaskId());
+        }
+        epics.clear();
+    }
+
+    @Override
+    public void removeAllSubtasks() {
+        for (Subtask subtask : this.getSubtasks()) {
+            prioritizedTasks.remove(subtask);
+            planner.remove(subtask);
+            historyManager.remove(subtask.getTaskId());
+        }
+        subtasks.clear();
+    }
+
+    @Override
+    public void removeAll() {
         tasks.clear();
         epics.clear();
         subtasks.clear();
-        Managers.getDefaultHistory().clear();
+        prioritizedTasks.clear();
+        planner.clear();
+        historyManager.clear();
     }
 }

@@ -1,6 +1,9 @@
 package dev.domain;
 
-public interface TaskBase extends  Comparable<TaskBase> {
+import java.time.Instant;
+import java.util.Optional;
+
+public interface TaskBase extends Cloneable, Comparable<TaskBase> {
     int getTaskId();
 
     String getName();
@@ -9,8 +12,16 @@ public interface TaskBase extends  Comparable<TaskBase> {
 
     TaskStatusEnum getStatus();
 
+    Optional<Instant> getStartTime();
+
+    long getDuration();
+
+    Optional<Instant> getEndTime();
+
     String toString(String separator);
 
-    TaskTypeEnum getType();
+    int compareToEndTime(TaskBase o);
 
+    Object clone(String name, String description);
+    TaskTypeEnum getType();
 }

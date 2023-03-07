@@ -1,20 +1,25 @@
 package dev.service;
 
 import dev.domain.Epic;
-import dev.domain.SubTask;
+import dev.domain.Subtask;
 import dev.domain.Task;
 import dev.domain.TaskBase;
 
 import java.util.List;
 
-public interface TaskManager {
+public interface TasksManager {
+
+    HistoryManager getHistoryManager();
+
     List<Epic> getEpics();
 
     List<Task> getTasks();
 
-    List<SubTask> getSubtasks();
+    List<Subtask> getSubtasks();
 
     List<TaskBase> getAllTasks();
+
+    List<TaskBase> getPrioritizedTasks();
 
     List<TaskBase> getHighLevelTasks();
 
@@ -22,13 +27,13 @@ public interface TaskManager {
 
     Epic createEpic(String name);
 
-    SubTask createSubtask(int epicId, String name);
+    Subtask createSubtask(int epicId, String name);
 
     int create(Task task);
 
     int create(Epic epic);
 
-    int create(SubTask subtask);
+    int create(Subtask subtask);
 
     int create(TaskBase task);
 
@@ -36,7 +41,7 @@ public interface TaskManager {
 
     void update(Epic epic);
 
-    void update(SubTask subtask);
+    void update(Subtask subtask);
 
     void update(TaskBase task);
 
@@ -52,7 +57,7 @@ public interface TaskManager {
 
     Task getTask(int taskId);
 
-    SubTask getSubtask(int taskId);
+    Subtask getSubtask(int taskId);
 
     Epic getEpic(int taskId);
 
@@ -69,4 +74,10 @@ public interface TaskManager {
     void removeTask(int taskId);
 
     void removeAllTasks();
+
+    void removeAllEpics();
+
+    void removeAllSubtasks();
+
+    void removeAll();
 }
