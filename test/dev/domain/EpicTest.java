@@ -83,11 +83,11 @@ class EpicTest {
                 "Эпик", "Это эпик");
         Managers.getDefault().create(epic);
 
-
+        // ТЗ №7: a. Пустой список подзадач.
         assertEquals(0, epic.size());
         assertEquals(TaskStatusEnum.NEW, epic.getStatus());
 
-
+        // ТЗ №7: b. Все подзадачи со статусом NEW.
         int taskId1 = CollectionUtils.getNextTaskId(Managers.getDefault().getAllTaskId());
         epic.create(taskId1, "Подзадача 1", "Это подзадача 1");
         int taskId2 = CollectionUtils.getNextTaskId(Managers.getDefault().getAllTaskId());
@@ -96,19 +96,19 @@ class EpicTest {
         epic.create(taskId3, "Подзадача 3");
         assertEquals(TaskStatusEnum.NEW, epic.getStatus());
 
-
+        // ТЗ №7: c. Все подзадачи со статусом DONE.
         epic.update((Subtask) epic.getSubtask(taskId1).clone(TaskStatusEnum.DONE));
         epic.update((Subtask) epic.getSubtask(taskId2).clone(TaskStatusEnum.DONE));
         epic.update((Subtask) epic.getSubtask(taskId3).clone(TaskStatusEnum.DONE));
         assertEquals(TaskStatusEnum.DONE, epic.getStatus());
 
-
+        // ТЗ №7: d. Подзадачи со статусами NEW и DONE.
         epic.update((Subtask) epic.getSubtask(taskId1).clone(TaskStatusEnum.DONE));
         epic.update((Subtask) epic.getSubtask(taskId2).clone(TaskStatusEnum.NEW));
         epic.update((Subtask) epic.getSubtask(taskId3).clone(TaskStatusEnum.DONE));
         assertEquals(TaskStatusEnum.IN_PROGRESS, epic.getStatus());
 
-
+        // ТЗ №7: e. Подзадачи со статусом IN_PROGRESS.
         epic.update((Subtask) epic.getSubtask(taskId1).clone(TaskStatusEnum.IN_PROGRESS));
         epic.update((Subtask) epic.getSubtask(taskId2).clone(TaskStatusEnum.IN_PROGRESS));
         epic.update((Subtask) epic.getSubtask(taskId3).clone(TaskStatusEnum.IN_PROGRESS));

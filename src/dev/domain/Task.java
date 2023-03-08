@@ -24,14 +24,17 @@ public class Task extends TaskAbstract implements TaskCloneable {
         this(taskId, name, description, status,
                 Optional.of(LocalDateTime.of(year, month, day, hours, minutes)
                         .atZone(ZoneId.systemDefault()).toInstant()), duration);
+        this.type = TaskTypeEnum.TASK;
     }
 
     public Task(int taskId, String name, String description) {
         this(taskId, name, description, TaskStatusEnum.NEW, Optional.empty(), 0);
+        this.type = TaskTypeEnum.TASK;
     }
 
     public Task(int taskId, String name) {
         this(taskId, name, "", TaskStatusEnum.NEW, Optional.empty(), 0);
+        this.type = TaskTypeEnum.TASK;
     }
 
     @Override

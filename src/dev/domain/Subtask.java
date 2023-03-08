@@ -20,16 +20,19 @@ public class Subtask extends Task {
                    Optional<Instant> startTime, long duration) {
         super(taskId, name, description, status, startTime, duration);
         this.parentEpicId = parentEpicId;
+        this.type = TaskTypeEnum.SUBTASK;
     }
 
     public Subtask(Integer parentEpicId, int taskId, String name, String description) {
         super(taskId, name, description);
         this.parentEpicId = parentEpicId;
+        this.type = TaskTypeEnum.SUBTASK;
     }
 
     public Subtask(Integer parentEpicId, int taskId, String name) {
         super(taskId, name);
         this.parentEpicId = parentEpicId;
+        this.type = TaskTypeEnum.SUBTASK;
     }
 
 

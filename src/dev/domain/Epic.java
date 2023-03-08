@@ -23,6 +23,7 @@ public class Epic extends TaskAbstract {
 
     public Epic(int taskId, String name) {
         this(taskId, name, "");
+        this.type = TaskTypeEnum.EPIC;
     }
 
 

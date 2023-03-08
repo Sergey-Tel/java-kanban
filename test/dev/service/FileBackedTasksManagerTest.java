@@ -102,17 +102,17 @@ class FileBackedTasksManagerTest extends TaskManagerTestAbstract<InMemoryTasksMa
 
     @Test
     void testFileBackedTasksManager() {
-
+        // ТЗ №7: a. Пустой список задач.
         createTestFile(linesTestA);
         manager = Managers.setFileTasksManager(testFilePath.toFile());
         assertEquals(0, manager.allSize());
 
-
+        // ТЗ №7: b. Эпик без подзадач.
         createTestFile(linesTestB);
         manager = Managers.setFileTasksManager(testFilePath.toFile());
         assertEquals(0, manager.getEpic(2).size());
 
-
+        // ТЗ №7: c. Пустой список истории.
         createTestFile(linesTestC);
         manager = Managers.setFileTasksManager(testFilePath.toFile());
         assertEquals(0, manager.getHistoryManager().getHistory().size());
