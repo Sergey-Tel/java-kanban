@@ -9,6 +9,7 @@ import dev.service.TasksManager;
 import java.io.IOException;
 import java.nio.file.FileSystems;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
@@ -16,6 +17,8 @@ import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
+
+import static java.nio.file.FileSystems.getDefault;
 
 public final class TestUtil {
     private static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy, HH:mm");
@@ -278,7 +281,7 @@ public final class TestUtil {
         System.out.println("Тестирование приложения по условиям, заданным в техническом задании Спринта №6:");
         Path path;
         try {
-            path = FileSystems.getDefault().getPath("java-kanban.csv");
+            path = getDefault().getPath("java-kanban");
             if (path.toFile().exists()) {
                 path.toFile().delete();
             }
@@ -352,7 +355,7 @@ public final class TestUtil {
         System.out.println("Тестирование приложения по условиям, заданным в техническом задании Спринта №7:");
         Path path;
         try {
-            path = FileSystems.getDefault().getPath("java-kanban.csv");
+            path = getDefault().getPath("java-kanban");
             if (path.toFile().exists()) {
                 path.toFile().delete();
             }

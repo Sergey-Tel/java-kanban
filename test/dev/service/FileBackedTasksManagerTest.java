@@ -8,6 +8,7 @@ import org.junit.jupiter.api.function.Executable;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 
 import static java.nio.file.FileSystems.getDefault;
 import static org.junit.jupiter.api.Assertions.assertEquals;
