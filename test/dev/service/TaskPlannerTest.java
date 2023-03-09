@@ -55,7 +55,7 @@ class TaskPlannerTest {
         firstTask = (Task) firstTask.clone(4);
         firstTask = (Task) firstTask.clone(getTime(2000, 1, 1, 12, 3));
         planner.add(firstTask);
-        Assertions.assertFalse(planner.containsDate(firstTask)); // Нельзя самому себя определять!
+        Assertions.assertFalse(planner.containsDate(firstTask));
 
         Task secondTask = manager.createTask("Проверочное задание 1 (3-7) и (3-7)");
         secondTask = (Task) secondTask.clone(4);
