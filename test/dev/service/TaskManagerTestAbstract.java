@@ -30,42 +30,42 @@ public abstract class TaskManagerTestAbstract<T extends TasksManager> {
     void testGetTasks() {
         List<Task> tasks = manager.getTasks();
         assertEquals(1, tasks.size());
-        Assertions.assertTrue(tasks.size() == manager.taskSize());
+        assertEquals(tasks.size(), manager.taskSize());
     }
 
     @Test
     void testGetEpics() {
         List<Epic> epics = manager.getEpics();
         assertEquals(1, epics.size());
-        Assertions.assertTrue(epics.size() == manager.epicSize());
+        assertEquals(epics.size(), manager.epicSize());
     }
 
     @Test
     void testGetSubtasks() {
         List<Subtask> subtasks = manager.getSubtasks();
         assertEquals(2, subtasks.size());
-        Assertions.assertTrue(subtasks.size() == manager.subtaskSize());
+        assertEquals(subtasks.size(), manager.subtaskSize());
     }
 
     @Test
     void testGetAllTasks() {
         List<TaskBase> tasks = manager.getAllTasks();
         assertEquals(4, tasks.size());
-        Assertions.assertTrue(tasks.size() == manager.allSize());
+        assertEquals(tasks.size(), manager.allSize());
     }
 
     @Test
     void testGetHighLevelTasks() {
         List<TaskBase> highLevelTasks = manager.getHighLevelTasks();
         assertEquals(2, highLevelTasks.size());
-        Assertions.assertTrue(highLevelTasks.size() == manager.epicSize() + manager.taskSize());
+        assertEquals(highLevelTasks.size(), manager.epicSize() + manager.taskSize());
     }
 
     @Test
     void testGetPrioritizedTasks() {
         List<TaskBase> prioritizedTasks = manager.getPrioritizedTasks();
         assertEquals(3, prioritizedTasks.size());
-        Assertions.assertTrue(prioritizedTasks.size() == manager.taskSize() + manager.subtaskSize());
+        assertEquals(prioritizedTasks.size(), manager.taskSize() + manager.subtaskSize());
     }
 
     @Test

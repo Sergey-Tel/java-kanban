@@ -7,17 +7,17 @@ import org.junit.jupiter.api.function.Executable;
 
 import java.io.FileWriter;
 import java.io.IOException;
-import java.nio.file.FileSystems;
 import java.nio.file.Path;
 
+import static java.nio.file.FileSystems.getDefault;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class FileBackedTasksManagerTest extends TaskManagerTestAbstract<InMemoryTasksManager> {
 
-    static final Path defualtPath = FileSystems.getDefault().getPath("java-kanban-test.csv");
+    static final Path defualtPath = getDefault().getPath("java-kanban-test.csv");
 
-    static final Path testFilePath = FileSystems.getDefault().getPath("java-kanban-error-test.csv");
+    static final Path testFilePath = getDefault().getPath("java-kanban-error-test.csv");
 
     static final String[] testFileLines = {
             "id|type|name|status|start|duration|description|epic\n",
@@ -102,17 +102,17 @@ class FileBackedTasksManagerTest extends TaskManagerTestAbstract<InMemoryTasksMa
 
     @Test
     void testFileBackedTasksManager() {
-        // ТЗ №7: a. Пустой список задач.
+
         createTestFile(linesTestA);
         manager = Managers.setFileTasksManager(testFilePath.toFile());
         assertEquals(0, manager.allSize());
 
-        // ТЗ №7: b. Эпик без подзадач.
+
         createTestFile(linesTestB);
         manager = Managers.setFileTasksManager(testFilePath.toFile());
         assertEquals(0, manager.getEpic(2).size());
 
-        // ТЗ №7: c. Пустой список истории.
+
         createTestFile(linesTestC);
         manager = Managers.setFileTasksManager(testFilePath.toFile());
         assertEquals(0, manager.getHistoryManager().getHistory().size());

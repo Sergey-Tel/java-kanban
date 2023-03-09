@@ -91,14 +91,14 @@ class TaskAbstractTest {
     void testClone() {
         Task cloneTask = (Task) task1.clone();
         Assertions.assertNotNull(cloneTask);
-        Assertions.assertTrue(task1.equals(cloneTask));
+        Assertions.assertEquals(task1, cloneTask);
     }
 
     @Test
     void testEquals() {
-        Assertions.assertTrue(task1.equals(task1));
-        Assertions.assertTrue(task2.equals(task2));
-        Assertions.assertFalse(task1.equals(task2));
+        Assertions.assertEquals(task1, task1);
+        Assertions.assertEquals(task2, task2);
+        Assertions.assertNotEquals(task1, task2);
     }
 
     @Test

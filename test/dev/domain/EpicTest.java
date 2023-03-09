@@ -83,11 +83,11 @@ class EpicTest {
                 "Эпик", "Это эпик");
         Managers.getDefault().create(epic);
 
-        // ТЗ №7: a. Пустой список подзадач.
+
         assertEquals(0, epic.size());
         assertEquals(TaskStatusEnum.NEW, epic.getStatus());
 
-        // ТЗ №7: b. Все подзадачи со статусом NEW.
+
         int taskId1 = CollectionUtils.getNextTaskId(Managers.getDefault().getAllTaskId());
         epic.create(taskId1, "Подзадача 1", "Это подзадача 1");
         int taskId2 = CollectionUtils.getNextTaskId(Managers.getDefault().getAllTaskId());
@@ -96,19 +96,19 @@ class EpicTest {
         epic.create(taskId3, "Подзадача 3");
         assertEquals(TaskStatusEnum.NEW, epic.getStatus());
 
-        // ТЗ №7: c. Все подзадачи со статусом DONE.
+
         epic.update((Subtask) epic.getSubtask(taskId1).clone(TaskStatusEnum.DONE));
         epic.update((Subtask) epic.getSubtask(taskId2).clone(TaskStatusEnum.DONE));
         epic.update((Subtask) epic.getSubtask(taskId3).clone(TaskStatusEnum.DONE));
         assertEquals(TaskStatusEnum.DONE, epic.getStatus());
 
-        // ТЗ №7: d. Подзадачи со статусами NEW и DONE.
+
         epic.update((Subtask) epic.getSubtask(taskId1).clone(TaskStatusEnum.DONE));
         epic.update((Subtask) epic.getSubtask(taskId2).clone(TaskStatusEnum.NEW));
         epic.update((Subtask) epic.getSubtask(taskId3).clone(TaskStatusEnum.DONE));
         assertEquals(TaskStatusEnum.IN_PROGRESS, epic.getStatus());
 
-        // ТЗ №7: e. Подзадачи со статусом IN_PROGRESS.
+
         epic.update((Subtask) epic.getSubtask(taskId1).clone(TaskStatusEnum.IN_PROGRESS));
         epic.update((Subtask) epic.getSubtask(taskId2).clone(TaskStatusEnum.IN_PROGRESS));
         epic.update((Subtask) epic.getSubtask(taskId3).clone(TaskStatusEnum.IN_PROGRESS));
@@ -136,15 +136,15 @@ class EpicTest {
     void subtaskIdList() {
         List<Integer> subTaskIdList = epic1.subtaskIdList();
         assertNotEquals(0, subTaskIdList.size());
-        Assertions.assertTrue(subTaskIdList.size() == epic1.size());
-        Assertions.assertTrue(subTaskIdList.get(0) == epic1.getSubtask(subTaskIdList.get(0)).getTaskId());
+        assertEquals(subTaskIdList.size(), epic1.size());
+        assertEquals((int) subTaskIdList.get(0), epic1.getSubtask(subTaskIdList.get(0)).getTaskId());
     }
 
     @Test
     void getAllSubtasks() {
         List<Subtask> subTasks = epic1.getAllSubtasks();
         assertNotEquals(0, subTasks.size());
-        Assertions.assertTrue(subTasks.size() == epic1.size());
+        assertEquals(subTasks.size(), epic1.size());
     }
 
     @Test
@@ -182,13 +182,13 @@ class EpicTest {
     @Test
     void testClone() {
         Epic cloneEpic = (Epic) epic1.clone();
-        Assertions.assertTrue(epic1.equals(cloneEpic));
+        assertEquals(epic1, cloneEpic);
     }
 
     @Test
     void testCloneWithNameAndDescription() {
         Epic cloneEpic = (Epic) epic2.clone("Клон эпик-задачи", "Это клон эпик-задачи");
-        Assertions.assertFalse(epic2.equals(cloneEpic));
+        assertNotEquals(epic2, cloneEpic);
         Assertions.assertEquals("Клон эпик-задачи", cloneEpic.getName());
         Assertions.assertEquals("Это клон эпик-задачи", cloneEpic.getDescription());
         assertNotEquals(epic2.getName(), cloneEpic.getName());
@@ -226,9 +226,9 @@ class EpicTest {
 
     @Test
     void testEquals() {
-        Assertions.assertTrue(epic1.equals(epic1));
-        Assertions.assertTrue(epic2.equals(epic2));
-        Assertions.assertFalse(epic1.equals(epic2));
+        assertEquals(epic1, epic1);
+        assertEquals(epic2, epic2);
+        assertNotEquals(epic1, epic2);
     }
 
     @Test

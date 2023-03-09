@@ -36,11 +36,11 @@ class InMemoryHistoryManagerTest {
 
     @Test
     void testHistoryManager() {
-        // ТЗ №7: a. Пустая история задач.
+
         manager.removeAll();
         assertEquals(0, manager.getHistoryManager().getHistory().size());
 
-        // ТЗ №7: b. Дублирование.
+
         manager.createTask("Первая задача!");
         Epic epic = manager.createEpic("Эпик-задача");
         manager.createSubtask(epic.getTaskId(), "Подзадача 1");
@@ -58,7 +58,7 @@ class InMemoryHistoryManagerTest {
         assertEquals(0, manager.getHistoryManager().getFirst().getTaskId());
         assertEquals(2, manager.getHistoryManager().getLast().getTaskId());
 
-        // ТЗ №7: с. Удаление из истории: начало, середина, конец.
+
 
         manager.removeTask(0);
         assertEquals(3, manager.getHistoryManager().getHistory().size());
@@ -77,7 +77,7 @@ class InMemoryHistoryManagerTest {
 
     @Test
     void removeTasks() {
-        // ТЗ №7: a. Пустая история задач.
+
         manager.removeAllTasks();
         assertEquals(3, manager.getHistoryManager().getHistory().size());
         assertEquals(0, manager.getTasks().size());
@@ -85,7 +85,7 @@ class InMemoryHistoryManagerTest {
 
     @Test
     void removeEpics() {
-        // ТЗ №7: a. Пустая история эпик-задач.
+
         manager.removeAllEpics();
         assertEquals(1, manager.getHistoryManager().getHistory().size());
         assertEquals(0, manager.getEpics().size());
@@ -93,7 +93,7 @@ class InMemoryHistoryManagerTest {
 
     @Test
     void removeSubtasks() {
-        // ТЗ №7: a. Пустая история подзадач.
+
         manager.removeAllSubtasks();
         assertEquals(2, manager.getHistoryManager().getHistory().size());
         assertEquals(0, manager.getSubtasks().size());

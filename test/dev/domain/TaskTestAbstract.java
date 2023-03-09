@@ -45,7 +45,7 @@ public abstract class TaskTestAbstract<T extends Task> {
     @Test
     void testCloneWithNameAndDescription() {
         T cloneTask =(T) task1.clone(TASK_NAME_2, TASK_DESCRIPTION_2);
-        Assertions.assertFalse(task1.equals(cloneTask));
+        Assertions.assertNotEquals(task1, cloneTask);
         Assertions.assertEquals(TASK_NAME_2, cloneTask.getName());
         Assertions.assertEquals(TASK_DESCRIPTION_2, cloneTask.getDescription());
         Assertions.assertNotEquals(task1.getName(), cloneTask.getName());
@@ -55,7 +55,7 @@ public abstract class TaskTestAbstract<T extends Task> {
     @Test
     void testCloneWithStatus() {
         T cloneTask =(T) task1.clone(TaskStatusEnum.DONE);
-        Assertions.assertFalse(task1.equals(cloneTask));
+        Assertions.assertNotEquals(task1, cloneTask);
         Assertions.assertEquals(TaskStatusEnum.DONE, cloneTask.getStatus());
         Assertions.assertNotEquals(task1.getStatus(), cloneTask.getStatus());
     }
@@ -63,7 +63,7 @@ public abstract class TaskTestAbstract<T extends Task> {
     @Test
     void testCloneWithNameDescriptionAndStatus() {
         T cloneTask =(T) task1.clone(TASK_NAME_2, TASK_DESCRIPTION_2, TaskStatusEnum.DONE);
-        Assertions.assertFalse(task1.equals(cloneTask));
+        Assertions.assertNotEquals(task1, cloneTask);
         Assertions.assertEquals(TASK_NAME_2, cloneTask.getName());
         Assertions.assertEquals(TASK_DESCRIPTION_2, cloneTask.getDescription());
         Assertions.assertEquals(TaskStatusEnum.DONE, cloneTask.getStatus());
@@ -75,7 +75,7 @@ public abstract class TaskTestAbstract<T extends Task> {
     @Test
     void testCloneWithDuration() {
         T cloneTask =(T) task1.clone(40);
-        Assertions.assertFalse(task1.equals(cloneTask));
+        Assertions.assertNotEquals(task1, cloneTask);
         Assertions.assertEquals(40, cloneTask.getDuration());
     }
 
@@ -84,7 +84,7 @@ public abstract class TaskTestAbstract<T extends Task> {
         Optional<Instant> startTime = Optional.of(LocalDateTime.of(2022, 5, 9, 22, 0)
                 .atZone(ZoneId.systemDefault()).toInstant());
         T cloneTask =(T) task1.clone(startTime);
-        Assertions.assertFalse(task1.equals(cloneTask));
+        Assertions.assertNotEquals(task1, cloneTask);
         Assertions.assertEquals(startTime, cloneTask.getStartTime());
         Assertions.assertNotEquals(task1.getStartTime(), cloneTask.getStartTime());
     }
@@ -94,7 +94,7 @@ public abstract class TaskTestAbstract<T extends Task> {
         Optional<Instant> startTime = Optional.of(LocalDateTime.of(2022, 5, 9, 22, 0)
                 .atZone(ZoneId.systemDefault()).toInstant());
         T cloneTask =(T) task1.clone(2022,5,9,22,0);
-        Assertions.assertFalse(task1.equals(cloneTask));
+        Assertions.assertNotEquals(task1, cloneTask);
         Assertions.assertEquals(startTime, cloneTask.getStartTime());
         Assertions.assertNotEquals(task1.getStartTime(), cloneTask.getStartTime());
     }
@@ -104,7 +104,7 @@ public abstract class TaskTestAbstract<T extends Task> {
         Optional<Instant> startTime = Optional.of(LocalDateTime.of(2022, 5, 9, 22, 0)
                 .atZone(ZoneId.systemDefault()).toInstant());
         T cloneTask =(T) task1.clone(TaskStatusEnum.IN_PROGRESS,2022,5,9,22,0);
-        Assertions.assertFalse(task1.equals(cloneTask));
+        Assertions.assertNotEquals(task1, cloneTask);
         Assertions.assertEquals(TaskStatusEnum.IN_PROGRESS, cloneTask.getStatus());
         Assertions.assertEquals(startTime, cloneTask.getStartTime());
         Assertions.assertNotEquals(task1.getStatus(), cloneTask.getStatus());
@@ -113,8 +113,8 @@ public abstract class TaskTestAbstract<T extends Task> {
 
     @Test
     void testEquals() {
-        Assertions.assertTrue(task1.equals(task1));
-        Assertions.assertTrue(task2.equals(task2));
-        Assertions.assertFalse(task1.equals(task2));
+        Assertions.assertEquals(task1, task1);
+        Assertions.assertEquals(task2, task2);
+        Assertions.assertNotEquals(task1, task2);
     }
 }
