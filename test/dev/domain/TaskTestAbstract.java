@@ -39,7 +39,7 @@ public abstract class TaskTestAbstract<T extends Task> {
     void testClone() {
         T cloneTask =(T) task1.clone();
         Assertions.assertNotNull(cloneTask);
-        Assertions.assertTrue(task1.equals(cloneTask));
+        Assertions.assertEquals(task1, cloneTask);
     }
 
     @Test

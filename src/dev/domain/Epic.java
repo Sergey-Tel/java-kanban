@@ -2,6 +2,7 @@ package dev.domain;
 
 import dev.service.Managers;
 
+import java.io.IOException;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
@@ -27,7 +28,7 @@ public class Epic extends TaskAbstract {
     }
 
 
-    public void create(Subtask subtask) {
+    public void create(Subtask subtask) throws IOException {
         if (!subtasks.contains(subtask.getTaskId())) {
             Managers.getDefault().create(subtask);
         } else {
@@ -37,7 +38,7 @@ public class Epic extends TaskAbstract {
     }
 
 
-    public void update(Subtask subtask) {
+    public void update(Subtask subtask) throws IOException {
         if (subtasks.contains(subtask.getTaskId())) {
             Managers.getDefault().update(subtask);
         } else {
@@ -46,17 +47,17 @@ public class Epic extends TaskAbstract {
         }
     }
 
-    public Subtask create(int taskId, String name, String description) {
+    public Subtask create(int taskId, String name, String description) throws IOException {
         Subtask addingSubtask = new Subtask(this.getTaskId(), taskId, name, description);
         Managers.getDefault().create(addingSubtask);
         return addingSubtask;
     }
 
-    public Subtask create(int taskId, String name) {
+    public Subtask create(int taskId, String name) throws IOException {
         return create(taskId, name, "");
     }
 
-    public Subtask getSubtask(Integer taskId) {
+    public Subtask getSubtask(Integer taskId) throws IOException {
         if (subtasks.contains(taskId)) {
             return Managers.getDefault().getSubtask(taskId);
         } else {
@@ -65,7 +66,7 @@ public class Epic extends TaskAbstract {
         }
     }
 
-    public void updateStatus() {
+    public void updateStatus() throws IOException {
         subtasks.clear();
         subtasks.addAll(Managers.getDefault().getSubtasks().stream()
                 .filter(subtask -> subtask.getEpicId().equals(this.getTaskId()))
@@ -112,13 +113,13 @@ public class Epic extends TaskAbstract {
     }
 
 
-    public List<Subtask> getAllSubtasks() {
+    public List<Subtask> getAllSubtasks() throws IOException {
         return Managers.getDefault().getSubtasks().stream()
                 .filter(subtask -> subtask.getEpicId().equals(this.getTaskId()))
                 .collect(Collectors.toList());
     }
 
-    public void removeSubtask(Integer taskId) {
+    public void removeSubtask(Integer taskId) throws IOException {
         if (subtasks.contains(taskId)) {
             if (Managers.getDefault().containsSubtaskId(taskId)) {
                 Managers.getDefault().removeTask(taskId);
@@ -129,7 +130,7 @@ public class Epic extends TaskAbstract {
         }
     }
 
-    public void removeAllTasks() {
+    public void removeAllTasks() throws IOException {
         for (Integer id : new LinkedList<>(subtasks)) {
             Managers.getDefault().removeTask(id);
         }
@@ -138,12 +139,16 @@ public class Epic extends TaskAbstract {
     @Override
     public Object clone() {
         Epic cloneableEpic = new Epic(this.getTaskId(), this.getName(), this.getDescription());
-        cloneableEpic.updateStatus();
+        try {
+            cloneableEpic.updateStatus();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         return cloneableEpic;
     }
 
     @Override
-    public Object clone(String name, String description) {
+    public Object clone(String name, String description) throws IOException {
         Epic cloneableEpic = new Epic(this.getTaskId(), name, description);
         cloneableEpic.updateStatus();
         return cloneableEpic;

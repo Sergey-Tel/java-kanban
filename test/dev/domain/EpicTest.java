@@ -7,6 +7,7 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.function.Executable;
 
+import java.io.IOException;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
@@ -31,8 +32,7 @@ class EpicTest {
     static Subtask subtask1_2;
 
     @BeforeAll
-    static void beforeAll() {
-        Managers.setMemoryTasksManager();
+    static void beforeAll() throws IOException {
         epic1 = new Epic(EPIC_ID_1, EPIC_NAME_1, EPIC_DESCRIPTION_1);
         Managers.getDefault().create(epic1);
         epic2 = new Epic(EPIC_ID_2, EPIC_NAME_2);
@@ -54,7 +54,7 @@ class EpicTest {
     void create() {
         final IndexOutOfBoundsException exception = assertThrows(IndexOutOfBoundsException.class, new Executable() {
             @Override
-            public void execute() {
+            public void execute() throws IOException {
                 Subtask subtask = new Subtask(epic1.getTaskId(), 3, "Подзадача 4");
                 epic1.create(subtask);
             }
@@ -63,13 +63,13 @@ class EpicTest {
     }
 
     @Test
-    void update() {
+    void update() throws IOException {
         Subtask subtask = new Subtask(epic1.getTaskId(), 2, "Подзадача 2");
         epic1.update(subtask);
 
         final IndexOutOfBoundsException exception = assertThrows(IndexOutOfBoundsException.class, new Executable() {
             @Override
-            public void execute() {
+            public void execute() throws IOException {
                 Subtask subtask = new Subtask(epic1.getTaskId(), 77, "Подзадача 77");
                 epic1.update(subtask);
             }
@@ -78,16 +78,16 @@ class EpicTest {
     }
 
     @Test
-    void updateStatus() {
+    void updateStatus() throws IOException {
         Epic epic = new Epic(CollectionUtils.getNextTaskId(Managers.getDefault().getAllTaskId()),
                 "Эпик", "Это эпик");
         Managers.getDefault().create(epic);
 
-
+        // ТЗ №7: a. Пустой список подзадач.
         assertEquals(0, epic.size());
         assertEquals(TaskStatusEnum.NEW, epic.getStatus());
 
-
+        // ТЗ №7: b. Все подзадачи со статусом NEW.
         int taskId1 = CollectionUtils.getNextTaskId(Managers.getDefault().getAllTaskId());
         epic.create(taskId1, "Подзадача 1", "Это подзадача 1");
         int taskId2 = CollectionUtils.getNextTaskId(Managers.getDefault().getAllTaskId());
@@ -119,7 +119,7 @@ class EpicTest {
     void getSubtask() {
         final IndexOutOfBoundsException exception = assertThrows(IndexOutOfBoundsException.class, new Executable() {
             @Override
-            public void execute() {
+            public void execute() throws IOException {
                 epic1.getSubtask(2);
                 epic1.getSubtask(1);
             }
@@ -133,7 +133,7 @@ class EpicTest {
     }
 
     @Test
-    void subtaskIdList() {
+    void subtaskIdList() throws IOException {
         List<Integer> subTaskIdList = epic1.subtaskIdList();
         assertNotEquals(0, subTaskIdList.size());
         assertEquals(subTaskIdList.size(), epic1.size());
@@ -141,14 +141,14 @@ class EpicTest {
     }
 
     @Test
-    void getAllSubtasks() {
+    void getAllSubtasks() throws IOException {
         List<Subtask> subTasks = epic1.getAllSubtasks();
         assertNotEquals(0, subTasks.size());
         assertEquals(subTasks.size(), epic1.size());
     }
 
     @Test
-    void removeSubtask() {
+    void removeSubtask() throws IOException {
         int size = epic2.size();
         epic2.create(77, "Подзадача для удаления");
         Assertions.assertTrue(epic2.containsSubtaskId(77));
@@ -159,7 +159,7 @@ class EpicTest {
 
         final IndexOutOfBoundsException exception = assertThrows(IndexOutOfBoundsException.class, new Executable() {
             @Override
-            public void execute() {
+            public void execute() throws IOException {
                 epic2.removeSubtask(77);
             }
         });
@@ -167,7 +167,7 @@ class EpicTest {
     }
 
     @Test
-    void removeAllTasks() {
+    void removeAllTasks() throws IOException {
         assertEquals(2, epic2.size());
         epic2.removeAllTasks();
         assertEquals(0, epic2.size());
@@ -186,7 +186,7 @@ class EpicTest {
     }
 
     @Test
-    void testCloneWithNameAndDescription() {
+    void testCloneWithNameAndDescription() throws IOException {
         Epic cloneEpic = (Epic) epic2.clone("Клон эпик-задачи", "Это клон эпик-задачи");
         assertNotEquals(epic2, cloneEpic);
         Assertions.assertEquals("Клон эпик-задачи", cloneEpic.getName());
@@ -196,7 +196,7 @@ class EpicTest {
     }
 
     @Test
-    void testToString() {
+    void testToString() throws IOException {
         Epic epic = new Epic(CollectionUtils.getNextTaskId(Managers.getDefault().getAllTaskId()),
                 "Эпик", "Это эпик");
         Managers.getDefault().create(epic);

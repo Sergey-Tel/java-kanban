@@ -25,6 +25,11 @@ public class FileBackedTasksManager extends InMemoryTasksManager {
                     "epic";
     private final File file;
 
+    protected FileBackedTasksManager() {
+        super();
+        this.file = null;
+    }
+
     private FileBackedTasksManager(File file) {
         super();
         this.file = file;
@@ -89,14 +94,14 @@ public class FileBackedTasksManager extends InMemoryTasksManager {
         long duration = Long.parseLong(param[5]);
         int epicId = Integer.parseInt(param[7]);
         switch (type) {
-            case EPIC -> {
+            case EPIC: {
                 return new Epic(taskId, param[2], param[6]);
             }
-            case SUBTASK -> {
+            case SUBTASK: {
                 return new Subtask(epicId, taskId, param[2], param[6], status,
                         startTime == 0 ? Optional.empty() : Optional.of(Instant.ofEpochMilli(startTime)), duration);
             }
-            default -> {
+            default: {
                 return new Task(taskId, param[2], param[6], status,
                         startTime == 0 ? Optional.empty() : Optional.of(Instant.ofEpochMilli(startTime)), duration);
             }
@@ -114,7 +119,8 @@ public class FileBackedTasksManager extends InMemoryTasksManager {
         }
     }
 
-    private void save() {
+    protected void save() {
+        if (file == null) return;
         try (FileWriter writer = new FileWriter(file)) {
             writer.write(COLUMN_HEADER + "\n");
             List<TaskBase> tasks = getAllTasks();
@@ -144,7 +150,7 @@ public class FileBackedTasksManager extends InMemoryTasksManager {
     }
 
     @Override
-    public Subtask createSubtask(int epicId, String name) {
+    public Subtask createSubtask(int epicId, String name) throws IOException {
         Subtask subtask = super.createSubtask(epicId, name);
         save();
         return subtask;
@@ -165,14 +171,14 @@ public class FileBackedTasksManager extends InMemoryTasksManager {
     }
 
     @Override
-    public int create(Subtask subtask) {
+    public int create(Subtask subtask) throws IOException {
         int id = super.create(subtask);
         save();
         return id;
     }
 
     @Override
-    public int create(TaskBase task) {
+    public int create(TaskBase task) throws IOException {
         if (task.getType() == EPIC) {
             return create((Epic) task);
         } else if (task.getType() == SUBTASK) {
@@ -189,19 +195,19 @@ public class FileBackedTasksManager extends InMemoryTasksManager {
     }
 
     @Override
-    public void update(Epic epic) {
+    public void update(Epic epic) throws IOException {
         super.update(epic);
         save();
     }
 
     @Override
-    public void update(Subtask subtask) {
+    public void update(Subtask subtask) throws IOException {
         super.update(subtask);
         save();
     }
 
     @Override
-    public void update(TaskBase task) {
+    public void update(TaskBase task) throws IOException {
         if (task instanceof Epic) {
             update((Epic) task);
         } else if (task instanceof Subtask) {
@@ -240,7 +246,7 @@ public class FileBackedTasksManager extends InMemoryTasksManager {
     }
 
     @Override
-    public void removeTask(int taskId) {
+    public void removeTask(int taskId) throws IOException {
         super.removeTask(taskId);
         save();
     }

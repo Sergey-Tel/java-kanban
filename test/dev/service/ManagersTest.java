@@ -24,19 +24,19 @@ class ManagersTest {
     }
 
     @Test
-    void setFileTasksManager() {
+    void setFileTasksManager() throws IOException {
         Managers.setFileTasksManager(path.toFile());
         Assertions.assertTrue(Managers.getDefault() instanceof FileBackedTasksManager);
     }
 
     @Test
-    void setMemoryTasksManager() {
+    void setMemoryTasksManager() throws IOException {
         Managers.setMemoryTasksManager();
         Assertions.assertTrue(Managers.getDefault() instanceof InMemoryTasksManager);
     }
 
     @Test
-    void getDefault() {
+    void getDefault() throws IOException {
         Assertions.assertNotNull(Managers.getDefault());
     }
 }

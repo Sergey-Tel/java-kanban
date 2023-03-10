@@ -20,7 +20,7 @@ class TaskStatusEnumTest {
     void compareEnum() {
         TaskStatusEnum status = null;
         status = TaskStatusEnum.compareEnum(status, null);
-        assertEquals(null, status);
+        assertNull(status);
 
         status = TaskStatusEnum.compareEnum(status, TaskStatusEnum.NEW);
         assertEquals(TaskStatusEnum.NEW, status);
@@ -47,5 +47,11 @@ class TaskStatusEnumTest {
     void fromKey() {
         assertEquals(TaskStatusEnum.IN_PROGRESS, TaskStatusEnum.fromKey("2"));
         assertEquals(TaskStatusEnum.NEW, TaskStatusEnum.fromKey("99"));
+    }
+
+    @Test
+    void fromString() {
+        assertEquals(TaskStatusEnum.IN_PROGRESS, TaskStatusEnum.fromString("IN_PROGRESS"));
+        assertEquals(TaskStatusEnum.NEW, TaskStatusEnum.fromString("PROGRESS"));
     }
 }

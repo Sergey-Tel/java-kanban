@@ -5,6 +5,7 @@ import dev.domain.Subtask;
 import dev.domain.Task;
 import dev.domain.TaskBase;
 
+import java.io.IOException;
 import java.util.List;
 
 public interface TasksManager {
@@ -27,23 +28,23 @@ public interface TasksManager {
 
     Epic createEpic(String name);
 
-    Subtask createSubtask(int epicId, String name);
+    Subtask createSubtask(int epicId, String name) throws IOException;
 
     int create(Task task);
 
     int create(Epic epic);
 
-    int create(Subtask subtask);
+    int create(Subtask subtask) throws IOException;
 
-    int create(TaskBase task);
+    int create(TaskBase task) throws IOException;
 
     void update(Task task);
 
-    void update(Epic epic);
+    void update(Epic epic) throws IOException;
 
-    void update(Subtask subtask);
+    void update(Subtask subtask) throws IOException;
 
-    void update(TaskBase task);
+    void update(TaskBase task) throws IOException;
 
     List<Integer> getAllTaskId();
 
@@ -71,7 +72,7 @@ public interface TasksManager {
 
     int allSize();
 
-    void removeTask(int taskId);
+    void removeTask(int taskId) throws IOException;
 
     void removeAllTasks();
 

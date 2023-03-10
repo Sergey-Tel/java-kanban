@@ -3,6 +3,7 @@ package dev.utils.menu;
 import dev.domain.*;
 import dev.service.TasksManager;
 
+import java.io.IOException;
 import java.util.Scanner;
 
 import static dev.utils.menu.DialogsInput.*;
@@ -13,7 +14,7 @@ import static java.lang.System.out;
 
 public class SubMenu {
 
-    public static void menuUpdateTask(TasksManager manager) {
+    public static void menuUpdateTask(TasksManager manager) throws IOException {
         Integer taskId = inputTaskId();
         if (taskId != null) {
             if (manager.containsTaskBaseId(taskId)) {
@@ -65,7 +66,7 @@ public class SubMenu {
         }
     }
 
-    public static void menuEditEpic(Epic epic, TasksManager manager) {
+    public static void menuEditEpic(Epic epic, TasksManager manager) throws IOException {
         Scanner scanner = getScanner();
         while (true) {
             printEditMenu();
@@ -137,7 +138,7 @@ public class SubMenu {
         }
     }
 
-    public static void menuRemoveTask(TasksManager manager) {
+    public static void menuRemoveTask(TasksManager manager) throws IOException {
         Integer taskId = inputTaskId();
         if (taskId != null) {
             if (manager.containsTaskBaseId(taskId)) {

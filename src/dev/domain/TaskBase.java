@@ -1,5 +1,6 @@
 package dev.domain;
 
+import java.io.IOException;
 import java.time.Instant;
 import java.util.Optional;
 
@@ -22,6 +23,6 @@ public interface TaskBase extends Cloneable, Comparable<TaskBase> {
 
     int compareToEndTime(TaskBase o);
 
-    Object clone(String name, String description);
+    Object clone(String name, String description) throws IOException;
     TaskTypeEnum getType();
 }

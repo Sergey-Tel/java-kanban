@@ -5,6 +5,7 @@ import dev.domain.Subtask;
 import dev.domain.Task;
 import dev.domain.TaskBase;
 
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
@@ -13,7 +14,7 @@ import java.util.List;
 public final class ReportUtils {
     public static final int LINE_LENGTH = 60;
 
-    public static void printTask(TaskBase task, boolean printAttachSubtask) {
+    public static void printTask(TaskBase task, boolean printAttachSubtask) throws IOException {
         if (task instanceof Epic) {
             Epic epic = (Epic) task;
             System.out.println("=".repeat(LINE_LENGTH));
@@ -61,7 +62,7 @@ public final class ReportUtils {
                 LocalDateTime.ofInstant(task.getEndTime().get(), ZoneId.systemDefault()).format(formatter) : "- ") + ".");
     }
 
-    public static void printTasksCollection(List<TaskBase> tasks, boolean printAttachSubtask) {
+    public static void printTasksCollection(List<TaskBase> tasks, boolean printAttachSubtask) throws IOException {
         if (tasks.size() > 0) {
             for (TaskBase task : tasks) {
                 printTask(task, printAttachSubtask);

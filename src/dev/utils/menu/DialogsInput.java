@@ -5,6 +5,7 @@ import dev.service.InvalidTaskDateException;
 import dev.service.TasksManager;
 import dev.utils.CollectionUtils;
 
+import java.io.IOException;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
@@ -20,7 +21,7 @@ import static java.lang.System.out;
 public class DialogsInput {
     public static final String EXIT_KEYS = "exit";
     public static final String BACK_KEYS = "back";
-    public static final String WARNING_MESSAGE = "Внимание! Команды задаются числовыми значениями от 0 до 12,\n"
+    public static final String WARNING_MESSAGE = "Внимание! Команды задаются числовыми значениями от 0 до 13,\n"
             + "либо последовательностью символов \"" + EXIT_KEYS + "\". Попробуйте еще раз!";
     public static final String INPUT_DESCRIPTION_CAPTION = "Описание: ";
     public static final String INPUT_STATUS_CAPTION = "Статус: ";
@@ -186,7 +187,7 @@ public class DialogsInput {
         out.println("Созданной эпик-задаче присвоен идентификационный номер: " + epic.getTaskId());
     }
 
-    public static void inputUpdateEpic(TasksManager manager) {
+    public static void inputUpdateEpic(TasksManager manager) throws IOException {
         Integer taskId = inputTaskId();
         if (taskId != null) {
             if (manager.containsEpicId(taskId)) {
@@ -197,7 +198,7 @@ public class DialogsInput {
         }
     }
 
-    public static void inputUpdateEpic(TasksManager manager, Integer taskId) {
+    public static void inputUpdateEpic(TasksManager manager, Integer taskId) throws IOException {
         if (manager.getEpic(taskId) != null) {
             Epic epic = manager.getEpic(taskId);
             String name = DialogsInput.inputText("Название (предыдущее значение): ", epic.getName());
@@ -230,7 +231,7 @@ public class DialogsInput {
             manager.create(subtask);
             System.out.println(INPUT_STATUS_CAPTION + subtask.getStatus().title + ".");
             out.println("Созданной подзадаче присвоен идентификационный номер: " + subtask.getTaskId());
-        } catch (InvalidTaskDateException ex) {
+        } catch (InvalidTaskDateException | IOException ex) {
             out.println(ex.getMessage());
         }
     }
@@ -268,7 +269,7 @@ public class DialogsInput {
         try {
             manager.update(updaterSubtask);
             System.out.println("Подзадача № " + subtask.getTaskId() + " успешно отредактирована.");
-        } catch (InvalidTaskDateException ex) {
+        } catch (InvalidTaskDateException | IOException ex) {
             out.println(ex.getMessage());
         }
     }

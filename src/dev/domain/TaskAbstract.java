@@ -1,5 +1,6 @@
 package dev.domain;
 
+import java.io.IOException;
 import java.time.Duration;
 import java.time.Instant;
 import java.util.Optional;
@@ -24,13 +25,13 @@ public abstract class TaskAbstract implements TaskBase {
         this.duration = Duration.ofMinutes(duration);
         this.endTime = Optional.empty();
     }
-    @Override
-    public TaskTypeEnum getType() {
-        return type;
-    }
 
     public TaskAbstract(int taskId, String name, String description) {
         this(taskId, name, description, TaskStatusEnum.NEW, 0);
+    }
+    @Override
+    public TaskTypeEnum getType() {
+        return type;
     }
 
     @Override
@@ -102,7 +103,7 @@ public abstract class TaskAbstract implements TaskBase {
     public abstract Object clone();
 
     @Override
-    public abstract Object clone(String name, String description);
+    public abstract Object clone(String name, String description) throws IOException;
 
     @Override
     public abstract boolean equals(Object o);

@@ -28,6 +28,7 @@ public class DialogsPrint {
         System.out.println("10 \tТестирование приложения по ТЗ (Спринт №5);");
         System.out.println("11 \tТестирование приложения по ТЗ (Спринт №6);");
         System.out.println("12 \tТестирование приложения по ТЗ (Спринт №7);");
+        System.out.println("13 \tТестирование приложения по ТЗ (Спринт №8);");
         System.out.println(EXIT_KEYS + "\tЗавершение работы приложения.");
     }
 

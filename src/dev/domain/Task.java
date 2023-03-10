@@ -6,7 +6,6 @@ import java.time.ZoneId;
 import java.util.Optional;
 
 
-
 public class Task extends TaskAbstract implements TaskCloneable {
 
     public Task(int taskId, String name, String description, TaskStatusEnum status, Optional<Instant> startTime,

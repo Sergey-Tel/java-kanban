@@ -9,7 +9,6 @@ import dev.service.TasksManager;
 import java.io.IOException;
 import java.nio.file.FileSystems;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
@@ -18,12 +17,11 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-import static java.nio.file.FileSystems.getDefault;
-
 public final class TestUtil {
     private static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy, HH:mm");
 
-    public static void testSprint3() {
+
+    public static void testSprint3() throws IOException {
         Managers.setMemoryTasksManager();
         TasksManager manager = Managers.getDefault();
 
@@ -121,7 +119,7 @@ public final class TestUtil {
     }
 
 
-    public static void testSprint4() {
+    public static void testSprint4() throws IOException {
         Managers.setMemoryTasksManager();
         TasksManager manager = Managers.getDefault();
 
@@ -196,7 +194,7 @@ public final class TestUtil {
     }
 
 
-    public static void testSprint5() {
+    public static void testSprint5() throws IOException {
         Managers.setMemoryTasksManager();
         TasksManager manager = Managers.getDefault();
 
@@ -277,11 +275,11 @@ public final class TestUtil {
     }
 
 
-    public static void testSprint6() {
+    public static void testSprint6() throws IOException {
         System.out.println("Тестирование приложения по условиям, заданным в техническом задании Спринта №6:");
         Path path;
         try {
-            path = getDefault().getPath("java-kanban");
+            path = FileSystems.getDefault().getPath("java-kanban.csv");
             if (path.toFile().exists()) {
                 path.toFile().delete();
             }
@@ -351,11 +349,11 @@ public final class TestUtil {
         ReportUtils.printTasksCollection(manager.getHistoryManager().getHistory(), false);
     }
 
-    public static void testSprint7() {
+    public static void testSprint7() throws IOException {
         System.out.println("Тестирование приложения по условиям, заданным в техническом задании Спринта №7:");
         Path path;
         try {
-            path = getDefault().getPath("java-kanban");
+            path = FileSystems.getDefault().getPath("java-kanban.csv");
             if (path.toFile().exists()) {
                 path.toFile().delete();
             }
@@ -365,6 +363,20 @@ public final class TestUtil {
             System.out.println(ex.getMessage());
             return;
         }
+        testSprint7_8();
+        System.out.println("Тест по ТЗ №7 выполнен.");
+    }
+
+    public static void testSprint8() throws IOException {
+        System.out.println("Тестирование приложения по условиям, заданным в техническом задании Спринта №8 (клиент-сервер):");
+
+        Managers.setHttpTaskManager("http://localhost", 8078);
+
+        testSprint7_8();
+        System.out.println("Тест по ТЗ №8 выполнен.");
+    }
+
+    private static void testSprint7_8() throws IOException {
         TasksManager manager = Managers.getDefault();
 
         System.out.println("\n1.\tСоздам две задачи и эпик с тремя подзадачами;");
@@ -429,7 +441,5 @@ public final class TestUtil {
         System.out.println("\n2.\tВыведу созданные задачи в порядке приоритетности;");
 
         ReportUtils.printTasksCollection(Managers.getDefault().getPrioritizedTasks(), false);
-
-        System.out.println("Тест по ТЗ №7 выполнен.");
     }
 }

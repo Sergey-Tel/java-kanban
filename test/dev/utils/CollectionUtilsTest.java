@@ -7,10 +7,12 @@ import dev.service.TasksManager;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
+import java.io.IOException;
+
 class CollectionUtilsTest {
 
     @Test
-    void getNextTaskId() {
+    void getNextTaskId() throws IOException {
         Managers.setMemoryTasksManager();
         TasksManager manager = Managers.getDefault();
         int nextTaskId = CollectionUtils.getNextTaskId(manager.getAllTaskId());

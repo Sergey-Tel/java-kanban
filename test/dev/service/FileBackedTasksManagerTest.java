@@ -7,18 +7,16 @@ import org.junit.jupiter.api.function.Executable;
 
 import java.io.FileWriter;
 import java.io.IOException;
+import java.nio.file.FileSystems;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 
-import static java.nio.file.FileSystems.getDefault;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-class FileBackedTasksManagerTest extends TaskManagerTestAbstract<InMemoryTasksManager> {
+class FileBackedTasksManagerTest extends TaskManagerTestAbstract<FileBackedTasksManager> {
 
-    static final Path defualtPath = getDefault().getPath("java-kanban-test.csv");
-
-    static final Path testFilePath = getDefault().getPath("java-kanban-error-test.csv");
+    static final Path defaultPath = FileSystems.getDefault().getPath("java-kanban-test.csv");
+    static final Path testFilePath = FileSystems.getDefault().getPath("java-kanban-error-test.csv");
 
     static final String[] testFileLines = {
             "id|type|name|status|start|duration|description|epic\n",
@@ -76,10 +74,6 @@ class FileBackedTasksManagerTest extends TaskManagerTestAbstract<InMemoryTasksMa
     };
 
     static void createTestFile(String[] fileLines) {
-        testFilePath.toFile().setExecutable(true);
-        testFilePath.toFile().setReadable(true);
-        testFilePath.toFile().setWritable(true);
-
         try (FileWriter writer = new FileWriter(testFilePath.toFile())) {
             for (String line : fileLines) {
                 writer.write(line);
@@ -91,8 +85,8 @@ class FileBackedTasksManagerTest extends TaskManagerTestAbstract<InMemoryTasksMa
 
     @Override
     @BeforeEach
-    void beforeEach() {
-        manager = Managers.setFileTasksManager(defualtPath.toFile());
+    void beforeEach() throws IOException {
+        manager = Managers.setFileTasksManager(defaultPath.toFile());
         manager.removeAll();
         manager.createTask("Первая задача!");
         Epic epic = manager.createEpic("Эпик-задача");

@@ -1,25 +1,35 @@
 package dev.service;
 
 import dev.domain.Epic;
+import dev.utils.KVServer;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.io.IOException;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
 class InMemoryHistoryManagerTest {
-
     static InMemoryTasksManager manager;
 
     @BeforeAll
-    static void beforeAll() {
+    static void beforeAll() throws IOException {
+        try {
+            if (Managers.kvServer == null) {
+                Managers.kvServer = new KVServer();
+                Managers.kvServer.start();
+            }
+        } catch (Exception ex) {
+            assertNull(ex.getMessage());
+        }
         Managers.tasksManager = null;
-        manager =(InMemoryTasksManager) Managers.getDefault();
-
+        manager = (InMemoryTasksManager) Managers.getDefault();
     }
 
     @BeforeEach
-    void beforeEach() {
+    void beforeEach() throws IOException {
         manager.removeAll();
         manager.createTask("Первая задача!");
         Epic epic = manager.createEpic("Эпик-задача");
@@ -35,7 +45,7 @@ class InMemoryHistoryManagerTest {
     }
 
     @Test
-    void testHistoryManager() {
+    void testHistoryManager() throws IOException {
 
         manager.removeAll();
         assertEquals(0, manager.getHistoryManager().getHistory().size());

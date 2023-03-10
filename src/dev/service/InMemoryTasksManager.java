@@ -3,6 +3,7 @@ package dev.service;
 import dev.domain.*;
 import dev.utils.CollectionUtils;
 
+import java.io.IOException;
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -85,7 +86,7 @@ public class InMemoryTasksManager implements TasksManager {
     }
 
     @Override
-    public Subtask createSubtask(int epicId, String name) {
+    public Subtask createSubtask(int epicId, String name) throws IOException {
         if (epics.containsKey(epicId)) {
             int newTaskId = CollectionUtils.getNextTaskId(getAllTaskId());
             Subtask subtask = new Subtask(epicId, newTaskId, name);
@@ -131,7 +132,7 @@ public class InMemoryTasksManager implements TasksManager {
     }
 
     @Override
-    public int create(TaskBase task) {
+    public int create(TaskBase task) throws IOException {
         if (task instanceof Epic) {
             return create((Epic) task);
         } else if (task instanceof Subtask) {
@@ -143,7 +144,7 @@ public class InMemoryTasksManager implements TasksManager {
 
 
     @Override
-    public int create(Subtask subtask) {
+    public int create(Subtask subtask) throws IOException {
         Optional<TaskBase> currentTask = planner.getCurrentTask(subtask);
         if (subtasks.containsKey(subtask.getTaskId())) {
             throw new IndexOutOfBoundsException("Подзадача с идентификационным номером " +
@@ -186,7 +187,7 @@ public class InMemoryTasksManager implements TasksManager {
 
 
     @Override
-    public void update(Epic epic) {
+    public void update(Epic epic) throws IOException {
         if (epics.containsKey(epic.getTaskId())) {
             epics.put(epic.getTaskId(), epic);
             epic.updateStatus();
@@ -198,7 +199,7 @@ public class InMemoryTasksManager implements TasksManager {
 
 
     @Override
-    public void update(TaskBase task) {
+    public void update(TaskBase task) throws IOException {
         if (task instanceof Epic) {
             update((Epic) task);
         } else if (task instanceof Subtask) {
@@ -210,7 +211,7 @@ public class InMemoryTasksManager implements TasksManager {
 
 
     @Override
-    public void update(Subtask subtask) {
+    public void update(Subtask subtask) throws IOException {
         if (subtasks.containsKey(subtask.getTaskId())) {
             Optional<TaskBase> currentTask = planner.getCurrentTask(subtask);
             if (currentTask.isPresent()) {
@@ -330,7 +331,7 @@ public class InMemoryTasksManager implements TasksManager {
     }
 
     @Override
-    public void removeTask(int taskId) {
+    public void removeTask(int taskId) throws IOException {
         if (tasks.containsKey(taskId)) {
             Task task = tasks.get(taskId);
             tasks.remove(taskId);
@@ -362,7 +363,7 @@ public class InMemoryTasksManager implements TasksManager {
 
     @Override
     public void removeAllTasks() {
-        for (Task task : this.getTasks()) {
+        for (Task task: this.getTasks()) {
             prioritizedTasks.remove(task);
             planner.remove(task);
             historyManager.remove(task.getTaskId());
@@ -373,7 +374,7 @@ public class InMemoryTasksManager implements TasksManager {
     @Override
     public void removeAllEpics() {
         removeAllSubtasks();
-        for (Epic epic : this.getEpics()) {
+        for (Epic epic: this.getEpics()) {
             prioritizedTasks.remove(epic);
             planner.remove(epic);
             historyManager.remove(epic.getTaskId());
@@ -383,7 +384,7 @@ public class InMemoryTasksManager implements TasksManager {
 
     @Override
     public void removeAllSubtasks() {
-        for (Subtask subtask : this.getSubtasks()) {
+        for (Subtask subtask: this.getSubtasks()) {
             prioritizedTasks.remove(subtask);
             planner.remove(subtask);
             historyManager.remove(subtask.getTaskId());

@@ -1,11 +1,11 @@
 package dev.utils.menu;
 
 import dev.domain.TaskBase;
-import dev.service.Managers;
 import dev.service.TasksManager;
 import dev.utils.ReportUtils;
 import dev.utils.TestUtil;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Scanner;
 
@@ -24,7 +24,7 @@ public class MainMenu {
         return scanner;
     }
 
-    public static void menu(TasksManager manager) {
+    public static void menu(TasksManager manager) throws IOException {
         Scanner scanner = getScanner();
 
         while (true) {
@@ -69,6 +69,9 @@ public class MainMenu {
                 case "12":
                     TestUtil.testSprint7();
                     break;
+                case "13":
+                    TestUtil.testSprint8();
+                    break;
                 case EXIT_KEYS:
                     System.out.println("Завершение работы приложения");
                     scanner.close();
@@ -81,7 +84,7 @@ public class MainMenu {
         }
     }
 
-    static void getPrioritizedTasks(TasksManager manager) {
+    static void getPrioritizedTasks(TasksManager manager) throws IOException {
         if (isNotNullTasks(manager)) {
             System.out.println("Список задач по приоритету:");
             List<TaskBase> tasks = manager.getPrioritizedTasks();
@@ -89,7 +92,7 @@ public class MainMenu {
         }
     }
 
-    static void getAllTasks(TasksManager manager) {
+    static void getAllTasks(TasksManager manager) throws IOException {
         if (isNotNullTasks(manager)) {
             System.out.println("Список всех задач:");
             List<TaskBase> tasks = manager.getHighLevelTasks();
@@ -104,7 +107,7 @@ public class MainMenu {
         }
     }
 
-    static void getTask(TasksManager manager) {
+    static void getTask(TasksManager manager) throws IOException {
         if (isNotNullTasks(manager)) {
             System.out.println("Получение задачи по ее идентификатору");
             TaskBase task = inputTask(manager);
@@ -120,21 +123,21 @@ public class MainMenu {
         menuCreateTask(manager);
     }
 
-    static void updateTask(TasksManager manager) {
+    static void updateTask(TasksManager manager) throws IOException {
         if (isNotNullTasks(manager)) {
             System.out.println("Обновление задачи");
             menuUpdateTask(manager);
         }
     }
 
-    static void removeTask(TasksManager manager) {
+    static void removeTask(TasksManager manager) throws IOException {
         if (isNotNullTasks(manager)) {
             System.out.println("Удаление задачи по идентификатору");
             menuRemoveTask(manager);
         }
     }
 
-    static void getHistory(TasksManager manager) {
+    static void getHistory(TasksManager manager) throws IOException {
         System.out.println("Вывод истории просмотра");
         List<TaskBase> tasks = manager.getHistoryManager().getHistory();
         ReportUtils.printTasksCollection(tasks, false);

@@ -10,6 +10,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.function.Executable;
 
+import java.io.IOException;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -19,7 +20,7 @@ public abstract class TaskManagerTestAbstract<T extends TasksManager> {
     T manager;
 
     @BeforeEach
-    abstract void beforeEach();
+    abstract void beforeEach() throws IOException;
 
     @AfterEach
     void afterEach() {
@@ -77,7 +78,7 @@ public abstract class TaskManagerTestAbstract<T extends TasksManager> {
 
         final IndexOutOfBoundsException exception = assertThrows(IndexOutOfBoundsException.class, new Executable() {
             @Override
-            public void execute() {
+            public void execute() throws IOException {
                 Task task = new Task(55, "Создаваемая задача c существующим номером");
                 manager.create((TaskBase)task);
             }
@@ -99,7 +100,7 @@ public abstract class TaskManagerTestAbstract<T extends TasksManager> {
     }
 
     @Test
-    void testCreateSubtask() {
+    void testCreateSubtask() throws IOException {
         Subtask subtask = new Subtask(1, 55, "Создаваемая подзадача");
         subtask = (Subtask) subtask.clone(10);
         subtask = (Subtask) subtask.clone(2022, 5, 1, 12, 0);
@@ -107,7 +108,7 @@ public abstract class TaskManagerTestAbstract<T extends TasksManager> {
 
         final IndexOutOfBoundsException exception = assertThrows(IndexOutOfBoundsException.class, new Executable() {
             @Override
-            public void execute() {
+            public void execute() throws IOException {
                 Subtask subtask = new Subtask(1, 55, "Создаваемая подзадача c существующим номером");
                 manager.create(subtask);
             }
@@ -116,7 +117,7 @@ public abstract class TaskManagerTestAbstract<T extends TasksManager> {
 
         final IndexOutOfBoundsException absentEpicException = assertThrows(IndexOutOfBoundsException.class, new Executable() {
             @Override
-            public void execute() {
+            public void execute() throws IOException {
                 Subtask subtask = new Subtask(99, 44, "Создаваемая подзадача c не существующим номером эпик-задачи");
                 manager.create((TaskBase)subtask);
             }
@@ -125,7 +126,7 @@ public abstract class TaskManagerTestAbstract<T extends TasksManager> {
 
         final InvalidTaskDateException dateException = assertThrows(InvalidTaskDateException.class, new Executable() {
             @Override
-            public void execute() {
+            public void execute() throws IOException {
                 Subtask subtask = new Subtask(1, 77, "Создаваемая подзадача c существующей датой");
                 subtask = (Subtask) subtask.clone(10);
                 subtask = (Subtask) subtask.clone(2022, 5, 1, 12, 0);
@@ -144,7 +145,7 @@ public abstract class TaskManagerTestAbstract<T extends TasksManager> {
         manager.create(epic);
         final IndexOutOfBoundsException exception = assertThrows(IndexOutOfBoundsException.class, new Executable() {
             @Override
-            public void execute() {
+            public void execute() throws IOException {
                 Epic epic = new Epic(55, "Эпик-задача с существующим номером");
                 manager.create((TaskBase)epic);
             }
@@ -153,7 +154,7 @@ public abstract class TaskManagerTestAbstract<T extends TasksManager> {
     }
 
     @Test
-    void testUpdate() {
+    void testUpdate() throws IOException {
         Task task = new Task(101, "Создаваемая задача");
         manager.create(task);
 
@@ -179,7 +180,7 @@ public abstract class TaskManagerTestAbstract<T extends TasksManager> {
 
         final IndexOutOfBoundsException absentTaskException = assertThrows(IndexOutOfBoundsException.class, new Executable() {
             @Override
-            public void execute() {
+            public void execute() throws IOException {
                 Task task = new Task(103,"Создаваемая задача c отсутствующим номером");
                 manager.update((TaskBase)task);
             }
@@ -188,7 +189,7 @@ public abstract class TaskManagerTestAbstract<T extends TasksManager> {
 
         final IndexOutOfBoundsException absentEpicException = assertThrows(IndexOutOfBoundsException.class, new Executable() {
             @Override
-            public void execute() {
+            public void execute() throws IOException {
                 Epic epic = new Epic(103, "Эпик-задача с отсутствующим номером");
                 manager.update((TaskBase)epic);
             }
@@ -197,7 +198,7 @@ public abstract class TaskManagerTestAbstract<T extends TasksManager> {
 
         final IndexOutOfBoundsException absentSubtaskException = assertThrows(IndexOutOfBoundsException.class, new Executable() {
             @Override
-            public void execute() {
+            public void execute() throws IOException {
                 Subtask subtask = new Subtask(103, 55, "Создаваемая подзадача c существующим номером");
                 manager.update((TaskBase)subtask);
             }
@@ -216,7 +217,7 @@ public abstract class TaskManagerTestAbstract<T extends TasksManager> {
 
         final InvalidTaskDateException subtaskDateException = assertThrows(InvalidTaskDateException.class, new Executable() {
             @Override
-            public void execute() {
+            public void execute() throws IOException {
                 Subtask subtask =(Subtask) manager.getTaskBase(103);
                 subtask = (Subtask) subtask.clone(2022, 5, 1, 14, 0);
                 manager.update(subtask);
@@ -267,7 +268,7 @@ public abstract class TaskManagerTestAbstract<T extends TasksManager> {
     }
 
     @Test
-    void removeTask() {
+    void removeTask() throws IOException {
         int size = manager.allSize();
 
         int taskId = manager.createTask("Задача для удаления").getTaskId();
@@ -287,7 +288,7 @@ public abstract class TaskManagerTestAbstract<T extends TasksManager> {
 
         final IndexOutOfBoundsException exception = assertThrows(IndexOutOfBoundsException.class, new Executable() {
             @Override
-            public void execute() {
+            public void execute() throws IOException {
                 manager.createSubtask(911,"Подзадача для несуществующей эпик-задачи");
             }
         });
@@ -306,7 +307,7 @@ public abstract class TaskManagerTestAbstract<T extends TasksManager> {
 
         final IndexOutOfBoundsException absentEpicException = assertThrows(IndexOutOfBoundsException.class, new Executable() {
             @Override
-            public void execute() {
+            public void execute() throws IOException {
                 manager.removeTask(77);
             }
         });

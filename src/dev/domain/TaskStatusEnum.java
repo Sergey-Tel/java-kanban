@@ -48,4 +48,13 @@ public enum TaskStatusEnum {
         }
         return TaskStatusEnum.NEW;
     }
+
+    public static TaskStatusEnum fromString(String name) {
+        for (TaskStatusEnum command : values()) {
+            if (command.name().equals(name)) {
+                return command;
+            }
+        }
+        return TaskStatusEnum.NEW;
+    }
 }
