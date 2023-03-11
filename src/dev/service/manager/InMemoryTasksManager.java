@@ -1,6 +1,10 @@
-package dev.service;
+package dev.service.manager;
 
 import dev.domain.*;
+import dev.service.InvalidTaskDateException;
+import dev.service.server.Managers;
+import dev.service.TaskPlanner;
+import dev.service.history.HistoryManager;
 import dev.utils.CollectionUtils;
 
 import java.io.IOException;

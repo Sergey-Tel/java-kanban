@@ -1,5 +1,9 @@
-package dev.service;
+package dev.service.server;
 
+import dev.service.manager.TasksManager;
+import dev.service.history.InMemoryHistoryManager;
+import dev.service.manager.FileBackedTasksManager;
+import dev.service.manager.InMemoryTasksManager;
 import dev.utils.KVServer;
 
 import java.io.File;
@@ -7,7 +11,7 @@ import java.io.IOException;
 
 
 public class Managers {
-    static TasksManager tasksManager;
+    public static TasksManager tasksManager;
     public static KVServer kvServer;
 
     private Managers(){}

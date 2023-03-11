@@ -1,7 +1,7 @@
 package dev.utils.menu;
 
 import dev.domain.TaskBase;
-import dev.service.TasksManager;
+import dev.service.manager.TasksManager;
 import dev.utils.ReportUtils;
 import dev.utils.TestUtil;
 

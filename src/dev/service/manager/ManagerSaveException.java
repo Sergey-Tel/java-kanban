@@ -1,4 +1,4 @@
-package dev.service;
+package dev.service.manager;
 
 public class ManagerSaveException extends RuntimeException {
 

@@ -1,6 +1,6 @@
 package dev.domain;
 
-import dev.service.Managers;
+import dev.service.server.Managers;
 import dev.utils.CollectionUtils;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;

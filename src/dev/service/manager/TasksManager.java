@@ -1,9 +1,10 @@
-package dev.service;
+package dev.service.manager;
 
 import dev.domain.Epic;
 import dev.domain.Subtask;
 import dev.domain.Task;
 import dev.domain.TaskBase;
+import dev.service.history.HistoryManager;
 
 import java.io.IOException;
 import java.util.List;

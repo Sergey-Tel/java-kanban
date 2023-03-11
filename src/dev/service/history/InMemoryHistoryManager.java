@@ -1,6 +1,7 @@
-package dev.service;
+package dev.service.history;
 
 import dev.domain.TaskBase;
+import dev.service.history.HistoryManager;
 
 import java.util.ArrayList;
 import java.util.HashMap;

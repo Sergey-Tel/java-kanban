@@ -1,7 +1,7 @@
 package dev.utils.menu;
 
 import dev.domain.*;
-import dev.service.TasksManager;
+import dev.service.manager.TasksManager;
 
 import java.io.IOException;
 import java.util.Scanner;

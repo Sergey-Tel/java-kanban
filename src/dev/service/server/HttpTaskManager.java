@@ -1,8 +1,10 @@
-package dev.service;
+package dev.service.server;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import dev.domain.TaskBase;
+import dev.service.manager.FileBackedTasksManager;
+import dev.service.TaskAdapter;
 
 import java.io.IOException;
 import java.net.HttpRetryException;
@@ -32,7 +34,7 @@ public class HttpTaskManager extends FileBackedTasksManager {
         client.register();
     }
 
-    protected void load() throws IOException {
+    public void load() throws IOException {
         client.register();
         Optional<String> jsonString = client.load(KEY);
         if (jsonString.isEmpty()) {
@@ -54,7 +56,7 @@ public class HttpTaskManager extends FileBackedTasksManager {
     }
 
     @Override
-    protected void save() {
+    public void save() {
         if (!isComplete) return;
         TasksCollectionPack packs = new TasksCollectionPack(getAllTasks(), historyManager.getHistoryId());
         String jsonString = gson.toJson(packs);

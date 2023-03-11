@@ -6,7 +6,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
 import dev.domain.Task;
 import dev.domain.TaskBase;
-import dev.service.Managers;
+import dev.service.server.Managers;
 import dev.service.TaskAdapter;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;

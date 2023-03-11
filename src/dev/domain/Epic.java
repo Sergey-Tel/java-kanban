@@ -1,6 +1,6 @@
 package dev.domain;
 
-import dev.service.Managers;
+import dev.service.server.Managers;
 
 import java.io.IOException;
 import java.time.Duration;

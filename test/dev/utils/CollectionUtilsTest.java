@@ -2,8 +2,8 @@ package dev.utils;
 
 import dev.domain.Task;
 import dev.domain.TaskStatusEnum;
-import dev.service.Managers;
-import dev.service.TasksManager;
+import dev.service.server.Managers;
+import dev.service.manager.TasksManager;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 

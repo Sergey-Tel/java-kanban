@@ -2,7 +2,7 @@ package dev.utils.menu;
 
 import dev.domain.*;
 import dev.service.InvalidTaskDateException;
-import dev.service.TasksManager;
+import dev.service.manager.TasksManager;
 import dev.utils.CollectionUtils;
 
 import java.io.IOException;

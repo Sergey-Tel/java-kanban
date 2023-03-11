@@ -1,4 +1,4 @@
-package dev.service;
+package dev.service.history;
 
 import dev.domain.TaskBase;
 

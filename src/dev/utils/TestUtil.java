@@ -1,10 +1,10 @@
 package dev.utils;
 
 import dev.domain.*;
-import dev.service.FileBackedTasksManager;
+import dev.service.manager.FileBackedTasksManager;
 import dev.service.InvalidTaskDateException;
-import dev.service.Managers;
-import dev.service.TasksManager;
+import dev.service.server.Managers;
+import dev.service.manager.TasksManager;
 
 import java.io.IOException;
 import java.nio.file.FileSystems;
