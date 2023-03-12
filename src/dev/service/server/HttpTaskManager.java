@@ -44,10 +44,10 @@ public class HttpTaskManager extends FileBackedTasksManager {
             if (packs == null) return;
             isComplete = false;
             this.removeAll();
-            for (TaskBase task : packs.getTasks()) {
+            for (TaskBase task : packs.tasks()) {
                 this.create(task);
             }
-            for (int id : packs.getHistory()) {
+            for (int id : packs.history()) {
                 TaskBase task = this.getTaskBase(id);
                 this.historyManager.add(task);
             }
@@ -68,21 +68,6 @@ public class HttpTaskManager extends FileBackedTasksManager {
         }
     }
 
-    private class TasksCollectionPack {
-        private final List<TaskBase> tasks;
-        private final List<Integer> history;
-
-        public TasksCollectionPack(List<TaskBase> tasks, List<Integer> history) {
-            this.tasks = tasks;
-            this.history = history;
-        }
-
-        public List<TaskBase> getTasks() {
-            return tasks;
-        }
-
-        public List<Integer> getHistory() {
-            return history;
-        }
+    private record TasksCollectionPack(List<TaskBase> tasks, List<Integer> history) {
     }
 }

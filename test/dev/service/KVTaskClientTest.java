@@ -16,8 +16,8 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 
 class KVTaskClientTest {
     public static final String KEY = "ALIAS";
-    static Gson gson;
-    static KVTaskClient client;
+    public static Gson gson;
+    public static KVTaskClient client;
 
     @BeforeAll
     public static void initServer() {

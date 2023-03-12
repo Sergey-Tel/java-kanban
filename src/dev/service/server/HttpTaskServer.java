@@ -88,7 +88,7 @@ public class HttpTaskServer {
     }
 
     private void getTasks(HttpExchange h) throws IOException {
-        try {
+        try (h) {
             String path = h.getRequestURI().getPath().substring("/tasks/task".length());
             if ("GET".equals(h.getRequestMethod())) {
                 try {
@@ -144,13 +144,11 @@ public class HttpTaskServer {
             } else {
                 h.sendResponseHeaders(405, 0);
             }
-        } finally {
-            h.close();
         }
     }
 
     private void getEpics(HttpExchange h) throws IOException {
-        try {
+        try (h) {
             String path = h.getRequestURI().getPath().substring("/tasks/epic".length());
             if ("GET".equals(h.getRequestMethod())) {
                 try {
@@ -206,13 +204,11 @@ public class HttpTaskServer {
             } else {
                 h.sendResponseHeaders(405, 0);
             }
-        } finally {
-            h.close();
         }
     }
 
     private void getSubtasks(HttpExchange h) throws IOException {
-        try {
+        try (h) {
             String path = h.getRequestURI().getPath().substring("/tasks/subtask".length());
             if ("GET".equals(h.getRequestMethod())) {
                 try {
@@ -264,7 +260,7 @@ public class HttpTaskServer {
                 }
                 if ("/epic".equals(path)) {
                     int epicId = getId(h);
-                    if (manager.containsEpicId(epicId)){
+                    if (manager.containsEpicId(epicId)) {
                         Epic epic = manager.getEpic(epicId);
                         epic.removeAllTasks();
                         h.sendResponseHeaders(204, 0);
@@ -288,13 +284,11 @@ public class HttpTaskServer {
             } else {
                 h.sendResponseHeaders(405, 0);
             }
-        } finally {
-            h.close();
         }
     }
 
     private void rootAll(HttpExchange h) throws IOException {
-        try {
+        try (h) {
             try {
                 ((HttpTaskManager) manager).load();
             } catch (HttpRetryException e) {
@@ -310,13 +304,11 @@ public class HttpTaskServer {
             } else {
                 h.sendResponseHeaders(405, 0);
             }
-        } finally {
-            h.close();
         }
     }
 
     private void getHistory(HttpExchange h) throws IOException {
-        try {
+        try (h) {
             try {
                 ((HttpTaskManager) manager).load();
             } catch (HttpRetryException e) {
@@ -329,14 +321,12 @@ public class HttpTaskServer {
             } else {
                 h.sendResponseHeaders(405, 0);
             }
-        } finally {
-            h.close();
         }
     }
 
     private void getAllSize(HttpExchange h) throws IOException {
         System.out.println("/size");
-        try {
+        try (h) {
             try {
                 ((HttpTaskManager) manager).load();
             } catch (HttpRetryException e) {
@@ -349,8 +339,6 @@ public class HttpTaskServer {
             } else {
                 h.sendResponseHeaders(405, 0);
             }
-        } finally {
-            h.close();
         }
     }
 }

@@ -19,7 +19,7 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.assertNull;
 
 public class HttpTaskServerTest {
-    static Gson gson;
+    public static Gson gson;
     public static HttpTaskServer httpServer;
 
     @BeforeAll
